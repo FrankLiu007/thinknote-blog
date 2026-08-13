@@ -1,0 +1,5 @@
+/admin/*
+  X-Robots-Tag: noindex
+
+/api/*
+  X-Robots-Tag: noindex

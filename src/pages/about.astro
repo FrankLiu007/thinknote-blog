@@ -1,0 +1,20 @@
+---
+import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
+import Layout from '../layouts/BlogPost.astro';
+---
+
+<Layout
+	title="关于 ThinkNote"
+	description="ThinkNote 博客简介"
+	pubDate={new Date('2026-08-13')}
+	heroImage={AboutHeroImage}
+>
+	<p>
+		ThinkNote 是一个用 Astro 搭建的个人博客，内容以 Markdown 存放在 Git 仓库中，可通过 Decap CMS
+		在浏览器里编辑并发布。
+	</p>
+	<p>
+		站点托管在 Cloudflare Pages，域名：
+		<a href="https://blog.thinknote.pro">blog.thinknote.pro</a>。
+	</p>
+</Layout>

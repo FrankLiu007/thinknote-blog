@@ -1,0 +1,32 @@
+backend:
+  name: github
+  repo: liuqimin/thinknote-blog
+  branch: main
+  base_url: https://blog.thinknote.pro
+  auth_endpoint: api/auth
+
+# Local editing: run `npm run cms` in another terminal, then open /admin/
+local_backend: true
+
+site_url: https://blog.thinknote.pro
+display_url: https://blog.thinknote.pro
+logo_url: /favicon.svg
+
+media_folder: public/images/uploads
+public_folder: /images/uploads
+
+collections:
+  - name: blog
+    label: Blog
+    folder: src/content/blog
+    create: true
+    slug: '{{slug}}'
+    extension: md
+    format: frontmatter
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Description, name: description, widget: string }
+      - { label: Publish Date, name: pubDate, widget: datetime, date_format: YYYY-MM-DD, time_format: false, format: YYYY-MM-DD }
+      - { label: Updated Date, name: updatedDate, widget: datetime, date_format: YYYY-MM-DD, time_format: false, format: YYYY-MM-DD, required: false }
+      - { label: Hero Image, name: heroImage, widget: image, required: false }
+      - { label: Body, name: body, widget: markdown }
