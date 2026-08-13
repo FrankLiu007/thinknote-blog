@@ -1,0 +1,44 @@
+---
+import { type CollectionEntry, getCollection, render } from 'astro:content';
+import BlogPost from '../../../layouts/BlogPost.astro';
+import { isLocale, type Locale } from '../../../i18n/config';
+import {
+	findTranslation,
+	getLocaleFromId,
+	getSlugFromId,
+	otherLocale,
+} from '../../../i18n/utils';
+
+export async function getStaticPaths() {
+	const posts = await getCollection('blog');
+	return posts.map((post) => {
+		const lang = getLocaleFromId(post.id);
+		const slug = getSlugFromId(post.id);
+		return {
+			params: { lang, slug },
+			props: { post },
+		};
+	});
+}
+
+type Props = {
+	post: CollectionEntry<'blog'>;
+};
+
+const { lang: langParam } = Astro.params;
+if (!langParam || !isLocale(langParam)) {
+	return Astro.redirect('/');
+}
+const lang = langParam as Locale;
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const allPosts = await getCollection('blog');
+const translation = findTranslation(allPosts, post, otherLocale(lang));
+// Prefer the sibling translation; otherwise fall back to the other locale home.
+const switchPath = translation ? `blog/${getSlugFromId(translation.id)}` : '';
+---
+
+<BlogPost lang={lang} switchPath={switchPath} {...post.data}>
+	<Content />
+</BlogPost>

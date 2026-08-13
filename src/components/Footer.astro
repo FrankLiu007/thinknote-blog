@@ -1,11 +1,22 @@
 ---
+import { SITE_TAGLINE } from '../consts';
+import type { Locale } from '../i18n/config';
+import { t } from '../i18n/ui';
+
+type Props = {
+	lang?: Locale;
+};
+
+const { lang } = Astro.props;
 const today = new Date();
+const tagline = lang ? t(lang).tagline : SITE_TAGLINE;
 ---
 
 <footer>
-	&copy; {today.getFullYear()} ThinkNote. All rights reserved.
+	<p class="tagline">{tagline}</p>
+	<p class="copy">&copy; {today.getFullYear()} ThinkNote</p>
 	<div class="social-links">
-		<a href="https://github.com/liuqimin/thinknote-blog" target="_blank" rel="noopener noreferrer">
+		<a href="https://github.com/FrankLiu007/thinknote-blog" target="_blank" rel="noopener noreferrer">
 			<span class="sr-only">GitHub</span>
 			<svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/github"
 				><path
@@ -22,6 +33,18 @@ const today = new Date();
 		background: linear-gradient(var(--gray-gradient)) no-repeat;
 		color: rgb(var(--gray));
 		text-align: center;
+	}
+	.tagline {
+		margin: 0 0 0.35em;
+		font-size: 0.85em;
+		font-weight: 700;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--accent);
+	}
+	.copy {
+		margin: 0;
+		font-size: 0.9em;
 	}
 	.social-links {
 		display: flex;

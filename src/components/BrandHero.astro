@@ -1,0 +1,177 @@
+---
+import type { Locale } from '../i18n/config';
+import { t } from '../i18n/ui';
+
+type Props = {
+	lang: Locale;
+};
+
+const { lang } = Astro.props;
+const copy = t(lang);
+const steps = copy.tagline.split(' → ');
+---
+
+<section class="brand-hero" aria-labelledby="brand-title">
+	<div class="brand-hero__inner">
+		<div class="brand-hero__visual">
+			<img
+				src="/thinknote-logo.png"
+				alt="ThinkNote"
+				width="160"
+				height="160"
+				class="brand-hero__logo"
+				decoding="async"
+			/>
+		</div>
+		<div class="brand-hero__copy">
+			<p class="brand-hero__flow" aria-label={copy.tagline}>
+				{
+					steps.map((step, i) => (
+						<span class="brand-hero__token">
+							{i > 0 && <span class="brand-hero__arrow" aria-hidden="true">→</span>}
+							<span class={`brand-hero__step brand-hero__step--${i}`}>{step}</span>
+						</span>
+					))
+				}
+			</p>
+			<h1 id="brand-title" class="brand-hero__title">{copy.brandHeadline}</h1>
+			<p class="brand-hero__support">{copy.brandSupport}</p>
+		</div>
+	</div>
+</section>
+
+<style>
+	.brand-hero {
+		position: relative;
+		margin: 0 0 2.5em;
+		padding: 2.25em 1.25em 2.5em;
+		border-radius: 18px;
+		overflow: hidden;
+		background:
+			radial-gradient(ellipse 80% 70% at 12% 20%, rgba(45, 196, 184, 0.22), transparent 55%),
+			radial-gradient(ellipse 60% 50% at 88% 15%, rgba(245, 197, 66, 0.14), transparent 50%),
+			radial-gradient(ellipse 50% 60% at 70% 90%, rgba(74, 143, 212, 0.12), transparent 55%),
+			linear-gradient(160deg, #0b0b0b 0%, #12161c 55%, #0e1418 100%);
+		color: #f4f6f8;
+		isolation: isolate;
+	}
+	.brand-hero::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background-image: radial-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+		background-size: 18px 18px;
+		opacity: 0.55;
+		pointer-events: none;
+		z-index: 0;
+	}
+	.brand-hero__inner {
+		position: relative;
+		z-index: 1;
+		display: flex;
+		align-items: center;
+		gap: 1.75em;
+	}
+	.brand-hero__visual {
+		flex-shrink: 0;
+	}
+	.brand-hero__logo {
+		display: block;
+		width: 128px;
+		height: 128px;
+		border-radius: 22px;
+		box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+		animation: brand-rise 0.7s ease-out both;
+	}
+	.brand-hero__copy {
+		min-width: 0;
+	}
+	.brand-hero__flow {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.35em 0.45em;
+		margin: 0 0 0.65em;
+		font-size: 0.78em;
+		font-weight: 700;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: rgba(244, 246, 248, 0.72);
+		animation: brand-rise 0.7s ease-out 0.08s both;
+	}
+	.brand-hero__token {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.45em;
+	}
+	.brand-hero__step--0 {
+		color: #7ee0d6;
+	}
+	.brand-hero__step--1 {
+		color: #f5c542;
+	}
+	.brand-hero__step--2 {
+		color: #9ec0ef;
+	}
+	.brand-hero__arrow {
+		color: rgba(244, 246, 248, 0.35);
+		font-weight: 400;
+	}
+	.brand-hero__title {
+		margin: 0 0 0.35em;
+		font-size: clamp(2rem, 5vw, 2.75rem);
+		font-weight: 700;
+		letter-spacing: -0.03em;
+		line-height: 1.1;
+		color: #fff;
+		animation: brand-rise 0.7s ease-out 0.14s both;
+	}
+	.brand-hero__support {
+		margin: 0;
+		max-width: 34em;
+		font-size: 1.02em;
+		line-height: 1.55;
+		color: rgba(244, 246, 248, 0.78);
+		animation: brand-rise 0.7s ease-out 0.22s both;
+	}
+
+	@keyframes brand-rise {
+		from {
+			opacity: 0;
+			transform: translateY(10px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	@media (max-width: 720px) {
+		.brand-hero {
+			padding: 1.75em 1.1em 2em;
+			border-radius: 14px;
+		}
+		.brand-hero__inner {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 1.25em;
+		}
+		.brand-hero__logo {
+			width: 96px;
+			height: 96px;
+			border-radius: 18px;
+		}
+		.brand-hero__support {
+			font-size: 0.95em;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.brand-hero__logo,
+		.brand-hero__flow,
+		.brand-hero__title,
+		.brand-hero__support {
+			animation: none;
+		}
+	}
+</style>

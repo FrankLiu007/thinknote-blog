@@ -1,11 +1,15 @@
 ---
 title: '欢迎来到 ThinkNote'
-description: 'ThinkNote 博客上线：Astro + Decap CMS + Cloudflare Pages'
+description: 'Think → Note → Share — 博客上线'
 pubDate: '2026-08-13'
+category: thinknote
+translationKey: welcome-to-thinknote
 heroImage: '/images/placeholders/blog-placeholder-1.jpg'
 ---
 
-这是 ThinkNote 博客的第一篇正式说明。
+ThinkNote 的闭环很短：**Think → Note → Share**。
+
+Obsidian 插件负责把思考落成笔记；这个博客是 Share——那些已经值得走出私人库的文字。
 
 ## 技术栈
 

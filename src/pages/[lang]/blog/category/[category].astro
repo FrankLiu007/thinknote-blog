@@ -1,0 +1,66 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../../../components/BaseHead.astro';
+import Footer from '../../../../components/Footer.astro';
+import Header from '../../../../components/Header.astro';
+import PostList from '../../../../components/PostList.astro';
+import { CATEGORY_SLUGS, SITE_TITLE, type CategorySlug } from '../../../../consts';
+import { isLocale, localeHtmlLang, locales, type Locale } from '../../../../i18n/config';
+import { t } from '../../../../i18n/ui';
+import { filterPostsByLocale } from '../../../../i18n/utils';
+
+export function getStaticPaths() {
+	return CATEGORY_SLUGS.flatMap((category) =>
+		locales.map((lang) => ({
+			params: { lang, category },
+		})),
+	);
+}
+
+const { lang: langParam, category } = Astro.params;
+if (!langParam || !isLocale(langParam)) {
+	return Astro.redirect('/');
+}
+const lang = langParam as Locale;
+const slug = category as CategorySlug;
+const copy = t(lang);
+const meta = copy.categories[slug];
+
+const posts = filterPostsByLocale(await getCollection('blog'), lang)
+	.filter((post) => post.data.category === slug)
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<!doctype html>
+<html lang={localeHtmlLang[lang]}>
+	<head>
+		<BaseHead
+			title={`${meta.label} | ${SITE_TITLE}`}
+			description={meta.description}
+			lang={lang}
+		/>
+		<style>
+			main {
+				width: 720px;
+			}
+			.page-title {
+				margin: 0 0 0.25em;
+				font-size: 1.563em;
+			}
+			.page-desc {
+				margin: 0 0 1.5em;
+				color: rgb(var(--gray));
+				font-size: 0.95em;
+			}
+		</style>
+	</head>
+	<body>
+		<Header lang={lang} switchPath={`blog/category/${slug}`} />
+		<main>
+			<h1 class="page-title">{meta.label}</h1>
+			<p class="page-desc">{meta.description}</p>
+			<PostList lang={lang} posts={posts} featured emptyMessage={copy.emptyCategory} />
+		</main>
+		<Footer lang={lang} />
+	</body>
+</html>

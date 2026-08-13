@@ -8,6 +8,19 @@ import { defineConfig, fontProviders } from 'astro/config';
 export default defineConfig({
 	site: 'https://blog.thinknote.pro',
 	integrations: [mdx(), sitemap()],
+	i18n: {
+		defaultLocale: 'en',
+		locales: ['en', 'zh'],
+		routing: {
+			prefixDefaultLocale: true,
+			redirectToDefaultLocale: false,
+		},
+	},
+	redirects: {
+		'/blog': '/',
+		'/about': '/zh/about',
+		'/blog/welcome-to-thinknote': '/zh/blog/welcome-to-thinknote',
+	},
 	fonts: [
 		{
 			provider: fontProviders.local(),

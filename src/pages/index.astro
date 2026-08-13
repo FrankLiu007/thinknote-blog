@@ -1,33 +1,63 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+/**
+ * Root entry: pick locale from saved preference or browser language, then redirect.
+ * Falls back to English for a global-first default.
+ */
+import { defaultLocale, LOCALE_STORAGE_KEY, locales } from '../i18n/config';
 ---
 
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
 	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<meta name="robots" content="noindex" />
+		<title>ThinkNote</title>
+		<script
+			is:inline
+			define:vars={{
+				storageKey: LOCALE_STORAGE_KEY,
+				locales,
+				defaultLocale,
+			}}
+		>
+			(function () {
+				var saved = localStorage.getItem(storageKey);
+				var lang = defaultLocale;
+				if (saved && locales.indexOf(saved) !== -1) {
+					lang = saved;
+				} else {
+					var candidates = [];
+					if (typeof navigator !== 'undefined') {
+						if (navigator.languages && navigator.languages.length) {
+							candidates = navigator.languages;
+						} else if (navigator.language) {
+							candidates = [navigator.language];
+						}
+					}
+					for (var i = 0; i < candidates.length; i++) {
+						var code = String(candidates[i]).toLowerCase();
+						if (code === 'zh' || code.indexOf('zh-') === 0) {
+							lang = 'zh';
+							break;
+						}
+						if (code === 'en' || code.indexOf('en-') === 0) {
+							lang = 'en';
+							break;
+						}
+					}
+				}
+				localStorage.setItem(storageKey, lang);
+				window.location.replace('/' + lang + '/');
+			})();
+		</script>
+		<meta http-equiv="refresh" content="0; url=/en/" />
 	</head>
 	<body>
-		<Header />
-		<main>
-			<h1>{SITE_TITLE}</h1>
-			<p>{SITE_DESCRIPTION}</p>
-			<p>
-				在
-				<a href="/blog">博客</a>
-				阅读最新文章，或前往
-				<a href="/about">关于</a>
-				了解更多。
-			</p>
-			<p>
-				内容可通过
-				<a href="/admin/">Decap CMS</a>
-				在线编辑（需 GitHub 登录）。
-			</p>
-		</main>
-		<Footer />
+		<p>
+			<a href="/en/">English</a>
+			·
+			<a href="/zh/">中文</a>
+		</p>
 	</body>
 </html>

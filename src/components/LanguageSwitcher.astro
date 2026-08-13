@@ -1,0 +1,51 @@
+---
+import { LOCALE_STORAGE_KEY, type Locale } from '../i18n/config';
+import { t } from '../i18n/ui';
+import { localePath, otherLocale } from '../i18n/utils';
+
+type Props = {
+	lang: Locale;
+	/** Path without locale prefix, e.g. '' | 'about' | 'blog/slug' */
+	path?: string;
+};
+
+const { lang, path = '' } = Astro.props;
+const nextLang = otherLocale(lang);
+const href = localePath(nextLang, path);
+const label = t(lang).switchTo;
+---
+
+<a
+	class="lang-switch"
+	href={href}
+	data-locale-switch={nextLang}
+	hreflang={nextLang}
+	lang={nextLang}
+>
+	{label}
+</a>
+
+<script define:vars={{ storageKey: LOCALE_STORAGE_KEY }}>
+	document.querySelectorAll('[data-locale-switch]').forEach((el) => {
+		el.addEventListener('click', () => {
+			const next = el.getAttribute('data-locale-switch');
+			if (next) localStorage.setItem(storageKey, next);
+		});
+	});
+</script>
+
+<style>
+	.lang-switch {
+		padding: 0.35em 0.5em;
+		font-size: 0.85em;
+		font-weight: 600;
+		color: rgb(var(--black));
+		text-decoration: none;
+		border: 1px solid rgb(var(--gray-light));
+		border-radius: 6px;
+	}
+	.lang-switch:hover {
+		border-color: var(--accent);
+		color: var(--accent);
+	}
+</style>

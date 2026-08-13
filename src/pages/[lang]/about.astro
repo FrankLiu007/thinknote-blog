@@ -1,0 +1,102 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import BrandHero from '../../components/BrandHero.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { CATEGORY_SLUGS, SITE_TITLE } from '../../consts';
+import { isLocale, localeHtmlLang, type Locale } from '../../i18n/config';
+import { t } from '../../i18n/ui';
+import { categoryPath, getStaticLocalePaths } from '../../i18n/utils';
+
+export function getStaticPaths() {
+	return getStaticLocalePaths();
+}
+
+const { lang: langParam } = Astro.params;
+if (!langParam || !isLocale(langParam)) {
+	return Astro.redirect('/');
+}
+const lang = langParam as Locale;
+const copy = t(lang);
+---
+
+<!doctype html>
+<html lang={localeHtmlLang[lang]}>
+	<head>
+		<BaseHead
+			title={`${copy.aboutTitle} | ${SITE_TITLE}`}
+			description={copy.aboutDescription}
+			lang={lang}
+		/>
+		<style>
+			main {
+				width: 720px;
+			}
+			.about-body {
+				margin: 0 0 2em;
+				color: rgb(var(--gray-dark));
+			}
+			.about-body p {
+				margin: 0 0 1em;
+			}
+			.about-body h2 {
+				margin: 1.5em 0 0.5em;
+				font-size: 1.25em;
+			}
+			.catalog {
+				list-style: none;
+				margin: 0 0 2em;
+				padding: 0;
+				border-top: 1px solid rgb(var(--gray-light));
+			}
+			.catalog li {
+				display: grid;
+				grid-template-columns: 7em 1fr;
+				gap: 1em;
+				align-items: baseline;
+				padding: 0.85em 0;
+				border-bottom: 1px solid rgb(var(--gray-light));
+			}
+			.catalog a {
+				font-weight: 700;
+				text-decoration: none;
+			}
+			.catalog a:hover {
+				text-decoration: underline;
+			}
+			.catalog span {
+				color: rgb(var(--gray));
+				font-size: 0.95em;
+			}
+			@media (max-width: 720px) {
+				.catalog li {
+					grid-template-columns: 1fr;
+					gap: 0.2em;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<Header lang={lang} switchPath="about" />
+		<main>
+			<BrandHero lang={lang} />
+			<section class="about-body">
+				{copy.aboutBody.map((paragraph) => <p>{paragraph}</p>)}
+
+				<h2>{copy.catalog}</h2>
+				<p>{copy.catalogIntro}</p>
+				<ul class="catalog">
+					{
+						CATEGORY_SLUGS.map((slug) => (
+							<li>
+								<a href={categoryPath(lang, slug)}>{copy.categories[slug].label}</a>
+								<span>{copy.categories[slug].description}</span>
+							</li>
+						))
+					}
+				</ul>
+			</section>
+		</main>
+		<Footer lang={lang} />
+	</body>
+</html>

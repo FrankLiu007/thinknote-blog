@@ -1,12 +1,25 @@
 import { getCollection } from 'astro:content';
 import rss from '@astrojs/rss';
-import { SITE_TITLE } from '../consts';
-import { t } from '../i18n/ui';
-import { filterPostsByLocale, getSlugFromId, postPath } from '../i18n/utils';
+import { SITE_TITLE } from '../../consts';
+import { isLocale } from '../../i18n/config';
+import { t } from '../../i18n/ui';
+import {
+	filterPostsByLocale,
+	getSlugFromId,
+	getStaticLocalePaths,
+	postPath,
+} from '../../i18n/utils';
 
-/** Root RSS defaults to English; localized feeds live at /en/rss.xml and /zh/rss.xml */
+export function getStaticPaths() {
+	return getStaticLocalePaths();
+}
+
 export async function GET(context) {
-	const lang = 'en';
+	const langParam = context.params.lang;
+	if (!langParam || !isLocale(langParam)) {
+		return new Response(null, { status: 404 });
+	}
+	const lang = langParam;
 	const copy = t(lang);
 	const posts = filterPostsByLocale(await getCollection('blog'), lang).sort(
 		(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),

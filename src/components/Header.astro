@@ -1,67 +1,189 @@
 ---
-import { SITE_TITLE } from '../consts';
+import { CATEGORY_SLUGS, SITE_TITLE, type CategorySlug } from '../consts';
+import { LOCALE_STORAGE_KEY, type Locale } from '../i18n/config';
+import { t } from '../i18n/ui';
+import { categoryPath, localePath } from '../i18n/utils';
 import HeaderLink from './HeaderLink.astro';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import ThemeToggle from './ThemeToggle.astro';
+
+type Props = {
+	lang: Locale;
+	/** Path without locale prefix for language switching */
+	switchPath?: string;
+};
+
+const { lang, switchPath = '' } = Astro.props;
+const copy = t(lang);
+const homeHref = localePath(lang);
+const aboutHref = localePath(lang, 'about');
+
+const normalize = (value: string) => {
+	const path = value.replace(/\/+$/, '');
+	return path === '' ? '/' : path;
+};
+const pathname = normalize(Astro.url.pathname.replace(import.meta.env.BASE_URL, '/'));
+
+const activeCategory = ((): CategorySlug | 'all' | null => {
+	if (pathname === normalize(homeHref)) return 'all';
+	for (const slug of CATEGORY_SLUGS) {
+		if (pathname === normalize(categoryPath(lang, slug))) return slug;
+	}
+	return null;
+})();
 ---
+
+<script is:inline define:vars={{ lang, storageKey: LOCALE_STORAGE_KEY }}>
+	try {
+		localStorage.setItem(storageKey, lang);
+	} catch (_) {}
+</script>
 
 <header>
 	<nav>
-		<h2><a href="/">{SITE_TITLE}</a></h2>
-		<div class="internal-links">
-			<HeaderLink href="/">Home</HeaderLink>
-			<HeaderLink href="/blog">Blog</HeaderLink>
-			<HeaderLink href="/about">About</HeaderLink>
+		<a class="brand" href={homeHref}>
+			<img
+				src="/thinknote-logo.png"
+				alt=""
+				width="36"
+				height="36"
+				class="brand-logo"
+				decoding="async"
+			/>
+			<span class="brand-text">{SITE_TITLE}</span>
+		</a>
+
+		<div class="nav-topics" aria-label={copy.catalog}>
+			<a class:list={[{ active: activeCategory === 'all' }]} href={homeHref}>{copy.all}</a>
+			{
+				CATEGORY_SLUGS.map((slug) => (
+					<a
+						class:list={[{ active: activeCategory === slug }]}
+						href={categoryPath(lang, slug)}
+					>
+						{copy.categories[slug].label}
+					</a>
+				))
+			}
 		</div>
-		<div class="social-links">
-			<a href="https://github.com/liuqimin/thinknote-blog" target="_blank" rel="noopener noreferrer">
-				<span class="sr-only">GitHub</span>
-				<svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32"
-					><path
-						fill="currentColor"
-						d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"
-					></path></svg
-				>
-			</a>
+
+		<div class="nav-actions">
+			<HeaderLink class="about-link" href={aboutHref}>{copy.about}</HeaderLink>
+			<LanguageSwitcher lang={lang} path={switchPath} />
+			<ThemeToggle />
 		</div>
 	</nav>
 </header>
 <style>
 	header {
+		position: sticky;
+		top: 0;
+		z-index: 40;
 		margin: 0;
 		padding: 0 1em;
-		background: white;
-		box-shadow: 0 2px 8px rgba(var(--black), 5%);
+		background: var(--header-bg);
+		backdrop-filter: blur(10px);
+		-webkit-backdrop-filter: blur(10px);
+		box-shadow: 0 1px 0 rgb(var(--gray-light));
 	}
-	h2 {
-		margin: 0;
-		font-size: 1em;
-	}
-
-	h2 a,
-	h2 a.active {
+	.brand {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.55em;
+		padding: 0.7em 0.35em 0.7em 0;
 		text-decoration: none;
+		color: rgb(var(--black));
+		border-bottom: none;
+		flex-shrink: 0;
+	}
+	.brand:hover,
+	.brand:hover .brand-text {
+		color: var(--accent);
+	}
+	.brand-logo {
+		display: block;
+		width: 36px;
+		height: 36px;
+		border-radius: 9px;
+		flex-shrink: 0;
+	}
+	.brand-text {
+		font-size: 1.05em;
+		font-weight: 700;
+		letter-spacing: -0.02em;
+		transition: color 0.15s ease;
 	}
 	nav {
+		display: grid;
+		grid-template-columns: 1fr auto 1fr;
+		align-items: center;
+		gap: 1em;
+		min-height: 3.5em;
+	}
+	.nav-topics {
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
+		justify-content: center;
+		gap: 0.15em 1.1em;
+		min-width: 0;
 	}
-	nav a {
-		padding: 1em 0.5em;
-		color: var(--black);
-		border-bottom: 4px solid transparent;
+	.nav-topics a {
+		padding: 0.35em 0;
+		font-size: 0.9em;
+		color: rgb(var(--gray));
 		text-decoration: none;
+		border-bottom: 2px solid transparent;
+		white-space: nowrap;
 	}
-	nav a.active {
-		text-decoration: none;
+	.nav-topics a:hover {
+		color: var(--accent);
+	}
+	.nav-topics a.active {
+		color: rgb(var(--black));
+		font-weight: 700;
 		border-bottom-color: var(--accent);
 	}
-	.social-links,
-	.social-links a {
+	.nav-actions {
 		display: flex;
+		align-items: center;
+		justify-self: end;
+		gap: 0.45em;
+	}
+	.nav-actions :global(.about-link) {
+		padding: 0.35em 0.55em;
+		font-size: 0.9em;
+		font-weight: 600;
+		color: rgb(var(--black));
+		text-decoration: none;
+		border-bottom: none;
+	}
+	.nav-actions :global(.about-link:hover),
+	.nav-actions :global(.about-link.active) {
+		color: var(--accent);
+		text-decoration: none;
 	}
 	@media (max-width: 720px) {
-		.social-links {
+		nav {
+			grid-template-columns: 1fr auto;
+			gap: 0.15em 0.75em;
+			padding-bottom: 0.55em;
+		}
+		.brand-text {
+			font-size: 0.95em;
+		}
+		.nav-topics {
+			grid-column: 1 / -1;
+			justify-content: flex-start;
+			gap: 0.85em;
+			overflow-x: auto;
+			scrollbar-width: none;
+			-webkit-overflow-scrolling: touch;
+		}
+		.nav-topics::-webkit-scrollbar {
 			display: none;
+		}
+		.nav-actions :global(.about-link) {
+			padding: 0.35em 0.4em;
 		}
 	}
 </style>

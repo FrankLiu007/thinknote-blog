@@ -34,7 +34,7 @@ npm run preview
 
 ## Cloudflare Pages 部署
 
-1. 将本仓库推送到 GitHub：`liuqimin/thinknote-blog`
+1. 将本仓库推送到 GitHub：`FrankLiu007/thinknote-blog`
 2. Cloudflare Dashboard → **Workers & Pages** → **Create** → **Pages** → Connect to Git
 3. 构建设置：
    - **Framework preset**: Astro（或 None）

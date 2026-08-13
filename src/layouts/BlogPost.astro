@@ -5,21 +5,39 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
+import type { CategorySlug } from '../consts';
+import { localeHtmlLang, type Locale } from '../i18n/config';
+import { t } from '../i18n/ui';
+import { categoryPath } from '../i18n/utils';
 
 type Props = {
+	lang: Locale;
+	switchPath?: string;
 	title: string;
 	description: string;
 	pubDate: Date;
 	updatedDate?: Date;
 	heroImage?: string | ImageMetadata;
+	category?: CategorySlug;
 };
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const {
+	lang,
+	switchPath = '',
+	title,
+	description,
+	pubDate,
+	updatedDate,
+	heroImage,
+	category,
+} = Astro.props;
+const copy = t(lang);
+const categoryMeta = category ? copy.categories[category] : undefined;
 ---
 
-<html lang="zh-CN">
+<html lang={localeHtmlLang[lang]}>
 	<head>
-		<BaseHead title={title} description={description} />
+		<BaseHead title={title} description={description} lang={lang} />
 		<style>
 			main {
 				width: calc(100% - 2em);
@@ -55,6 +73,16 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				margin-bottom: 0.5em;
 				color: rgb(var(--gray));
 			}
+			.category {
+				display: inline-block;
+				margin-bottom: 0.75em;
+				font-size: 0.85em;
+				font-weight: 600;
+				text-decoration: none;
+			}
+			.category:hover {
+				text-decoration: underline;
+			}
 			.last-updated-on {
 				font-style: italic;
 			}
@@ -62,7 +90,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 	</head>
 
 	<body>
-		<Header />
+		<Header lang={lang} switchPath={switchPath} />
 		<main>
 			<article>
 				<div class="hero-image">
@@ -77,12 +105,19 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				</div>
 				<div class="prose">
 					<div class="title">
+						{
+							categoryMeta && category && (
+								<a class="category" href={categoryPath(lang, category)}>
+									{categoryMeta.label}
+								</a>
+							)
+						}
 						<div class="date">
-							<FormattedDate date={pubDate} />
+							<FormattedDate date={pubDate} lang={lang} />
 							{
 								updatedDate && (
 									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
+										{copy.lastUpdated} <FormattedDate date={updatedDate} lang={lang} />
 									</div>
 								)
 							}
@@ -94,6 +129,6 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				</div>
 			</article>
 		</main>
-		<Footer />
+		<Footer lang={lang} />
 	</body>
 </html>

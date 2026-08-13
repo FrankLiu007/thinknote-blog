@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: liuqimin/thinknote-blog
+  repo: FrankLiu007/thinknote-blog
   branch: main
   base_url: https://blog.thinknote.pro
   auth_endpoint: api/auth
@@ -16,9 +16,9 @@ media_folder: public/images/uploads
 public_folder: /images/uploads
 
 collections:
-  - name: blog
-    label: Blog
-    folder: src/content/blog
+  - name: blog_zh
+    label: Blog (中文)
+    folder: src/content/blog/zh
     create: true
     slug: '{{slug}}'
     extension: md
@@ -26,6 +26,37 @@ collections:
     fields:
       - { label: Title, name: title, widget: string }
       - { label: Description, name: description, widget: string }
+      - { label: Translation Key, name: translationKey, widget: string, hint: 'Same key as the English version (e.g. welcome-to-thinknote)', required: false }
+      - label: Category
+        name: category
+        widget: select
+        options:
+          - { label: Think&Note, value: thoughts }
+          - { label: ThinkNote 插件, value: thinknote }
+          - { label: 键盘, value: keyboard }
+      - { label: Publish Date, name: pubDate, widget: datetime, date_format: YYYY-MM-DD, time_format: false, format: YYYY-MM-DD }
+      - { label: Updated Date, name: updatedDate, widget: datetime, date_format: YYYY-MM-DD, time_format: false, format: YYYY-MM-DD, required: false }
+      - { label: Hero Image, name: heroImage, widget: image, required: false }
+      - { label: Body, name: body, widget: markdown }
+
+  - name: blog_en
+    label: Blog (English)
+    folder: src/content/blog/en
+    create: true
+    slug: '{{slug}}'
+    extension: md
+    format: frontmatter
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Description, name: description, widget: string }
+      - { label: Translation Key, name: translationKey, widget: string, hint: 'Same key as the Chinese version (e.g. welcome-to-thinknote)', required: false }
+      - label: Category
+        name: category
+        widget: select
+        options:
+          - { label: Think&Note, value: thoughts }
+          - { label: ThinkNote Plugin, value: thinknote }
+          - { label: Keyboard, value: keyboard }
       - { label: Publish Date, name: pubDate, widget: datetime, date_format: YYYY-MM-DD, time_format: false, format: YYYY-MM-DD }
       - { label: Updated Date, name: updatedDate, widget: datetime, date_format: YYYY-MM-DD, time_format: false, format: YYYY-MM-DD, required: false }
       - { label: Hero Image, name: heroImage, widget: image, required: false }

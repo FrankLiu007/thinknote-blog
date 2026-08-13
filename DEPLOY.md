@@ -1,18 +1,16 @@
 # 部署清单（需你在浏览器完成）
 
-本地代码与初始 commit 已就绪。因当前环境无法登录 GitHub / Cloudflare，请按下列步骤完成上线。
+本地代码推送后，因需登录 GitHub / Cloudflare，请按下列步骤完成上线。
 
 ## 1. 推送到 GitHub
 
 ```powershell
 cd C:\Users\liuqimin\thinknote-blog
-gh auth login
-# 或先在 GitHub 网站新建空仓库 liuqimin/thinknote-blog，再：
-git remote add origin https://github.com/liuqimin/thinknote-blog.git
+git remote add origin https://github.com/FrankLiu007/thinknote-blog.git
 git push -u origin main
 ```
 
-若 GitHub 用户名不是 `liuqimin`，请改远程地址，并同步修改 `public/admin/config.yml` 里的 `repo` 字段。
+若仓库名变更，请同步修改 `public/admin/config.yml` 里的 `repo` 字段。
 
 ## 2. 连接 Cloudflare Pages
 
