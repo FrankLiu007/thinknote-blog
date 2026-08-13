@@ -1,6 +1,6 @@
 # ThinkNote Blog
 
-Astro 静态博客 + Decap CMS，部署于 Cloudflare Pages，域名：https://blog.thinknote.pro
+Astro 静态博客 + Decap CMS，部署于 Cloudflare（Worker + 静态资源），域名：https://blog.thinknote.pro
 
 ## 本地开发
 
@@ -32,40 +32,27 @@ npm run preview
 
 输出目录：`dist/`
 
-## Cloudflare Pages 部署
+## Cloudflare 部署（Worker + 静态资源）
 
-1. 将本仓库推送到 GitHub：`FrankLiu007/thinknote-blog`
-2. Cloudflare Dashboard → **Workers & Pages** → **Create** → **Pages** → Connect to Git
-3. 构建设置：
-   - **Framework preset**: Astro（或 None）
-   - **Build command**: `npm run build`
-   - **Build output directory**: `dist`
-   - **Node version**: `22`（可在环境变量设置 `NODE_VERSION=22`）
-4. **Custom domains** → 添加 `blog.thinknote.pro`（DNS 已在 Cloudflare 时可自动配置）
+详见 [`DEPLOY.md`](DEPLOY.md)。要点：
 
-## Decap CMS 线上登录（GitHub OAuth）
+1. 仓库：`FrankLiu007/thinknote-blog`
+2. Build command：`npm run build`（由 `wrangler.toml` 部署 `dist` + `worker.js`）
+3. 环境变量：`NODE_VERSION=22`、`GITHUB_CLIENT_ID`、`GITHUB_CLIENT_SECRET`
+4. 自定义域名：`blog.thinknote.pro`
 
-1. GitHub → Settings → Developer settings → [OAuth Apps](https://github.com/settings/developers) → New OAuth App
-   - **Homepage URL**: `https://blog.thinknote.pro`
-   - **Authorization callback URL**: `https://blog.thinknote.pro/api/auth`
-2. 创建后拿到 Client ID，并生成 Client Secret
-3. Cloudflare Pages → 项目 → Settings → Environment variables（Production）：
-   - `GITHUB_CLIENT_ID`
-   - `GITHUB_CLIENT_SECRET`
-4. 重新部署后访问 https://blog.thinknote.pro/admin/ → Login with GitHub
-
-OAuth 代理实现：[`functions/api/auth.js`](functions/api/auth.js)
-
-若 GitHub 用户名/仓库名不同，请同步修改 [`public/admin/config.yml`](public/admin/config.yml) 中的 `repo` 字段。
+OAuth 入口：[`worker.js`](worker.js)（`/api/auth`）  
+Decap 配置：[`public/admin/config.yml`](public/admin/config.yml)
 
 ## 内容结构
 
 | 路径 | 说明 |
 |------|------|
-| `src/content/blog/*.md` | 文章 |
+| `src/content/blog/{en,zh}/` | 中英文文章 |
 | `public/admin/` | Decap 入口与配置 |
 | `public/images/uploads/` | CMS 上传目录 |
-| `functions/api/auth.js` | GitHub OAuth（Pages Functions） |
+| `worker.js` | GitHub OAuth（`/api/auth`） |
+| `wrangler.toml` | Cloudflare Worker 部署配置 |
 
 ## 脚本
 

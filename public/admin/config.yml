@@ -5,8 +5,8 @@ backend:
   base_url: https://blog.thinknote.pro
   auth_endpoint: api/auth
 
-# Local editing: run `npm run cms` in another terminal, then open /admin/
-local_backend: true
+# Local editing only: set true and run `npm run cms`, then open /admin/
+local_backend: false
 
 site_url: https://blog.thinknote.pro
 display_url: https://blog.thinknote.pro
