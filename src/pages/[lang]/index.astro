@@ -31,7 +31,7 @@ const posts = filterPostsByLocale(await getCollection('blog'), lang).sort(
 		<BaseHead title={SITE_TITLE} description={copy.siteDescription} lang={lang} />
 		<style>
 			main {
-				width: 720px;
+				width: var(--page-width);
 			}
 		</style>
 	</head>

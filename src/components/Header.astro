@@ -80,7 +80,7 @@ const activeCategory = ((): CategorySlug | 'all' | null => {
 		top: 0;
 		z-index: 40;
 		margin: 0;
-		padding: 0 1em;
+		padding: 0 var(--page-gutter);
 		background: var(--header-bg);
 		backdrop-filter: blur(10px);
 		-webkit-backdrop-filter: blur(10px);
@@ -95,6 +95,7 @@ const activeCategory = ((): CategorySlug | 'all' | null => {
 		color: rgb(var(--black));
 		border-bottom: none;
 		flex-shrink: 0;
+		justify-self: start;
 	}
 	.brand:hover,
 	.brand:hover .brand-text {
@@ -113,19 +114,23 @@ const activeCategory = ((): CategorySlug | 'all' | null => {
 		letter-spacing: -0.02em;
 		transition: color 0.15s ease;
 	}
+	/* Side rails for brand / actions; center rail matches main content. */
 	nav {
 		display: grid;
-		grid-template-columns: 1fr auto 1fr;
+		grid-template-columns: 1fr minmax(0, var(--page-width)) 1fr;
 		align-items: center;
-		gap: 1em;
+		gap: 0.75em;
 		min-height: 3.5em;
+		width: 100%;
+		margin: 0 auto;
 	}
 	.nav-topics {
 		display: flex;
 		align-items: center;
-		justify-content: center;
-		gap: 0.15em 1.1em;
+		justify-content: flex-start;
+		gap: 1.1em;
 		min-width: 0;
+		justify-self: stretch;
 	}
 	.nav-topics a {
 		padding: 0.35em 0;
@@ -148,6 +153,7 @@ const activeCategory = ((): CategorySlug | 'all' | null => {
 		align-items: center;
 		justify-self: end;
 		gap: 0.45em;
+		flex-shrink: 0;
 	}
 	.nav-actions :global(.about-link) {
 		padding: 0.35em 0.55em;
@@ -162,19 +168,31 @@ const activeCategory = ((): CategorySlug | 'all' | null => {
 		color: var(--accent);
 		text-decoration: none;
 	}
-	@media (max-width: 720px) {
+	@media (max-width: 960px) {
 		nav {
 			grid-template-columns: 1fr auto;
-			gap: 0.15em 0.75em;
-			padding-bottom: 0.55em;
+			grid-template-areas:
+				'brand actions'
+				'topics topics';
+			gap: 0 0.75em;
+			padding-bottom: 0.45em;
+			min-height: 0;
+		}
+		.brand {
+			grid-area: brand;
+			padding: 0.55em 0.35em 0.35em 0;
 		}
 		.brand-text {
 			font-size: 0.95em;
 		}
+		.nav-actions {
+			grid-area: actions;
+		}
 		.nav-topics {
-			grid-column: 1 / -1;
+			grid-area: topics;
 			justify-content: flex-start;
 			gap: 0.85em;
+			padding: 0.15em 0 0.35em;
 			overflow-x: auto;
 			scrollbar-width: none;
 			-webkit-overflow-scrolling: touch;

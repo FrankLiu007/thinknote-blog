@@ -41,7 +41,7 @@ const posts = filterPostsByLocale(await getCollection('blog'), lang)
 		/>
 		<style>
 			main {
-				width: 720px;
+				width: var(--page-width);
 			}
 			.page-title {
 				margin: 0 0 0.25em;

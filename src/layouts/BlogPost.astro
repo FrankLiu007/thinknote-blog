@@ -40,24 +40,26 @@ const categoryMeta = category ? copy.categories[category] : undefined;
 		<BaseHead title={title} description={description} lang={lang} />
 		<style>
 			main {
-				width: calc(100% - 2em);
-				max-width: 100%;
-				margin: 0;
+				width: var(--page-width);
+				max-width: calc(100% - 2 * var(--page-gutter));
+				margin: 0 auto;
+				padding: 1.5em 0 3em;
 			}
 			.hero-image {
 				width: 100%;
 			}
 			.hero-image img {
 				display: block;
-				margin: 0 auto;
+				width: 100%;
+				height: auto;
+				margin: 0;
 				border-radius: 12px;
 				box-shadow: var(--box-shadow);
 			}
 			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 1em;
+				width: 100%;
+				margin: 0;
+				padding: 1.25em 0 0;
 				color: rgb(var(--gray-dark));
 			}
 			.title {
