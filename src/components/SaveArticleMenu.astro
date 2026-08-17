@@ -1,0 +1,395 @@
+---
+import { THINKNOTE_APP_URL } from '../consts';
+import type { Locale } from '../i18n/config';
+import { t } from '../i18n/ui';
+
+type Props = {
+	lang: Locale;
+	canonicalUrl: string;
+};
+
+const { lang, canonicalUrl } = Astro.props;
+const copy = t(lang);
+const fromBlogUrl = `${THINKNOTE_APP_URL}/from-blog?url=${encodeURIComponent(canonicalUrl)}`;
+const demoGif = `${THINKNOTE_APP_URL}/share-docx-demo-${lang === 'zh' ? 'zh' : 'en'}.gif`;
+---
+
+<div class="save-fab no-print" data-save-fab>
+	<button
+		type="button"
+		class="save-fab-btn"
+		aria-haspopup="dialog"
+		aria-expanded="false"
+		aria-controls="save-article-dialog"
+		data-save-open
+	>
+		<svg class="save-fab-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+			<path
+				fill="currentColor"
+				d="M17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7l-4-4zm-5 16a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3-10H5V5h10v4z"
+			></path>
+		</svg>
+		<span>{copy.save}</span>
+	</button>
+
+	<div
+		class="save-backdrop"
+		data-save-backdrop
+		hidden
+		role="presentation"
+	>
+		<div
+			id="save-article-dialog"
+			class="save-modal"
+			role="dialog"
+			aria-modal="true"
+			aria-labelledby="save-article-title"
+			tabindex="-1"
+			data-save-dialog
+		>
+			<h2 id="save-article-title" class="save-modal-title">{copy.saveMenuTitle}</h2>
+			<p class="save-modal-desc">{copy.saveMenuIntro}</p>
+
+			<a class="save-option save-option-featured" href={fromBlogUrl}>
+				<div class="save-option-head">
+					<span class="save-option-badge">{copy.saveToNotesBadge}</span>
+					<span class="save-option-title">{copy.saveToNotes}</span>
+				</div>
+				<p class="save-option-hook">{copy.saveToNotesHook}</p>
+				<p class="save-option-desc">{copy.saveToNotesDesc}</p>
+				<div class="save-demo" aria-hidden="true">
+					<img
+						class="save-demo-gif"
+						src={demoGif}
+						alt=""
+						loading="lazy"
+						data-demo-gif
+					/>
+					<div class="save-demo-placeholder" data-demo-fallback>
+						<span class="save-demo-label">{copy.docxDemoLabel}</span>
+						<span class="save-demo-hint">{copy.docxDemoHint}</span>
+					</div>
+				</div>
+			</a>
+
+			<button type="button" class="save-option save-option-secondary" data-save-pdf>
+				<span class="save-option-title">{copy.exportPdf}</span>
+				<span class="save-option-desc">{copy.exportPdfDesc}</span>
+			</button>
+
+			<div class="save-modal-actions">
+				<button type="button" class="save-btn-ghost" data-save-close>
+					{copy.cancelSave}
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="print-only print-banner" aria-hidden="true">
+	<img src="/thinknote-logo.png" alt="" width="28" height="28" />
+	<div>
+		<strong>ThinkNote</strong>
+		<span>{copy.printSlogan}</span>
+		<span class="print-mark">{copy.printMark}</span>
+	</div>
+</div>
+
+<style>
+	.save-fab {
+		position: fixed;
+		right: max(1rem, env(safe-area-inset-right));
+		bottom: max(1.25rem, env(safe-area-inset-bottom));
+		z-index: 40;
+	}
+
+	.save-fab-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.75rem 1.1rem;
+		border: none;
+		border-radius: 999px;
+		background: var(--accent);
+		color: #fff;
+		font: inherit;
+		font-size: 0.95rem;
+		font-weight: 600;
+		cursor: pointer;
+		box-shadow: var(--box-shadow);
+	}
+
+	.save-fab-btn:hover {
+		background: var(--accent-dark);
+	}
+
+	.save-fab-icon {
+		flex-shrink: 0;
+	}
+
+	.save-backdrop {
+		position: fixed;
+		inset: 0;
+		z-index: 50;
+		display: flex;
+		align-items: flex-end;
+		justify-content: flex-end;
+		padding: 1rem;
+		padding-bottom: max(5.5rem, calc(env(safe-area-inset-bottom) + 4.5rem));
+		padding-right: max(1rem, env(safe-area-inset-right));
+		background: rgba(15, 18, 25, 0.35);
+	}
+
+	.save-backdrop[hidden] {
+		display: none;
+	}
+
+	.save-modal {
+		width: min(420px, calc(100vw - 2rem));
+		max-height: min(80vh, 640px);
+		overflow: auto;
+		padding: 1.25rem;
+		border-radius: 16px;
+		background: var(--bg);
+		color: rgb(var(--gray-dark));
+		box-shadow: var(--box-shadow);
+		outline: none;
+	}
+
+	.save-modal-title {
+		margin: 0 0 0.35rem;
+		font-size: 1.2rem;
+	}
+
+	.save-modal-desc {
+		margin: 0 0 1rem;
+		font-size: 0.95rem;
+		color: rgb(var(--gray));
+		line-height: 1.45;
+	}
+
+	.save-option {
+		display: block;
+		width: 100%;
+		margin: 0 0 0.75rem;
+		padding: 1rem;
+		border: 1px solid rgba(var(--gray), 0.25);
+		border-radius: 12px;
+		background: transparent;
+		color: inherit;
+		text-align: left;
+		text-decoration: none;
+		font: inherit;
+		cursor: pointer;
+	}
+
+	.save-option:hover {
+		border-color: var(--accent);
+		background: color-mix(in srgb, var(--accent) 8%, transparent);
+	}
+
+	.save-option-featured {
+		border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+		background: color-mix(in srgb, var(--accent) 6%, transparent);
+	}
+
+	.save-option-head {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5rem;
+		margin-bottom: 0.35rem;
+	}
+
+	.save-option-badge {
+		display: inline-block;
+		padding: 0.15rem 0.45rem;
+		border-radius: 999px;
+		background: var(--accent);
+		color: #fff;
+		font-size: 0.7rem;
+		font-weight: 700;
+		letter-spacing: 0.02em;
+		text-transform: uppercase;
+	}
+
+	.save-option-title {
+		display: block;
+		font-weight: 700;
+		font-size: 1rem;
+	}
+
+	.save-option-hook {
+		margin: 0 0 0.35rem;
+		font-size: 0.9rem;
+		font-weight: 600;
+		color: var(--accent-dark);
+	}
+
+	.save-option-desc {
+		display: block;
+		margin: 0;
+		font-size: 0.85rem;
+		line-height: 1.45;
+		color: rgb(var(--gray));
+	}
+
+	.save-demo {
+		position: relative;
+		margin-top: 0.75rem;
+		overflow: hidden;
+		border-radius: 8px;
+		background: rgba(var(--gray-light), 0.6);
+		aspect-ratio: 16 / 10;
+	}
+
+	.save-demo-gif {
+		display: none;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.save-demo-gif.is-visible {
+		display: block;
+	}
+
+	.save-demo-placeholder {
+		position: absolute;
+		inset: 0;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 0.25rem;
+		padding: 0.75rem;
+		text-align: center;
+		font-size: 0.8rem;
+		color: rgb(var(--gray));
+	}
+
+	.save-demo-placeholder.is-hidden {
+		display: none;
+	}
+
+	.save-demo-label {
+		font-weight: 600;
+	}
+
+	.save-modal-actions {
+		display: flex;
+		justify-content: flex-end;
+		margin-top: 0.25rem;
+	}
+
+	.save-btn-ghost {
+		border: none;
+		background: transparent;
+		color: rgb(var(--gray));
+		font: inherit;
+		font-size: 0.9rem;
+		cursor: pointer;
+		padding: 0.4rem 0.6rem;
+	}
+
+	.save-btn-ghost:hover {
+		color: rgb(var(--gray-dark));
+	}
+
+	.print-only {
+		display: none;
+	}
+
+	@media print {
+		:global(.no-print),
+		:global(header),
+		:global(footer),
+		.save-fab {
+			display: none !important;
+		}
+
+		.print-banner {
+			display: flex !important;
+			align-items: center;
+			gap: 0.75rem;
+			margin-bottom: 1.25rem;
+			padding-bottom: 0.75rem;
+			border-bottom: 1px solid #ccc;
+			color: #111;
+		}
+
+		.print-banner img {
+			width: 28px;
+			height: 28px;
+		}
+
+		.print-banner strong {
+			display: block;
+			font-size: 14pt;
+		}
+
+		.print-banner span {
+			display: block;
+			font-size: 10pt;
+			color: #444;
+		}
+
+		.print-mark {
+			margin-top: 0.15rem;
+			font-size: 9pt !important;
+			color: #666 !important;
+		}
+	}
+</style>
+
+<script>
+	function initSaveFab(root) {
+		const openBtn = root.querySelector('[data-save-open]');
+		const backdrop = root.querySelector('[data-save-backdrop]');
+		const dialog = root.querySelector('[data-save-dialog]');
+		const closeBtn = root.querySelector('[data-save-close]');
+		const pdfBtn = root.querySelector('[data-save-pdf]');
+		const demoGif = root.querySelector('[data-demo-gif]');
+		const demoFallback = root.querySelector('[data-demo-fallback]');
+		if (!openBtn || !backdrop || !dialog) return;
+
+		const open = () => {
+			backdrop.hidden = false;
+			openBtn.setAttribute('aria-expanded', 'true');
+			dialog.focus();
+		};
+
+		const close = () => {
+			backdrop.hidden = true;
+			openBtn.setAttribute('aria-expanded', 'false');
+			openBtn.focus();
+		};
+
+		openBtn.addEventListener('click', open);
+		closeBtn?.addEventListener('click', close);
+		backdrop.addEventListener('click', (event) => {
+			if (event.target === backdrop) close();
+		});
+		dialog.addEventListener('click', (event) => event.stopPropagation());
+		pdfBtn?.addEventListener('click', () => {
+			close();
+			window.setTimeout(() => window.print(), 50);
+		});
+		document.addEventListener('keydown', (event) => {
+			if (event.key === 'Escape' && !backdrop.hidden) close();
+		});
+
+		if (demoGif && demoFallback) {
+			demoGif.addEventListener('load', () => {
+				demoGif.classList.add('is-visible');
+				demoFallback.classList.add('is-hidden');
+			});
+			demoGif.addEventListener('error', () => {
+				demoGif.classList.remove('is-visible');
+				demoFallback.classList.remove('is-hidden');
+			});
+		}
+	}
+
+	document.querySelectorAll('[data-save-fab]').forEach(initSaveFab);
+</script>

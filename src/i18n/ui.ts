@@ -21,6 +21,20 @@ type UiDict = {
 	aboutBody: string[];
 	switchTo: string;
 	categories: CategoryCopy;
+	save: string;
+	saveMenuTitle: string;
+	saveMenuIntro: string;
+	saveToNotes: string;
+	saveToNotesBadge: string;
+	saveToNotesHook: string;
+	saveToNotesDesc: string;
+	docxDemoLabel: string;
+	docxDemoHint: string;
+	exportPdf: string;
+	exportPdfDesc: string;
+	cancelSave: string;
+	printSlogan: string;
+	printMark: string;
 };
 
 export const ui: Record<Locale, UiDict> = {
@@ -47,6 +61,21 @@ export const ui: Record<Locale, UiDict> = {
 			'Built with Astro, edited via Decap CMS, hosted on Cloudflare Pages at blog.thinknote.pro.',
 		],
 		switchTo: '中文',
+		save: 'Save',
+		saveMenuTitle: 'Save this article',
+		saveMenuIntro: 'Choose how you’d like to keep it.',
+		saveToNotes: 'Save to ThinkNote',
+		saveToNotesBadge: 'Recommended',
+		saveToNotesHook: '1:1 export to editable Word (docx)',
+		saveToNotesDesc:
+			'Keep editing in the extension with layout preserved, then export a polished docx in one click.',
+		docxDemoLabel: 'docx export demo',
+		docxDemoHint: 'Demo GIF failed to load',
+		exportPdf: 'Export PDF',
+		exportPdfDesc: 'Print to PDF in your browser for a quick offline copy.',
+		cancelSave: 'Cancel',
+		printSlogan: 'Chat. Think. Note. Share.',
+		printMark: 'via ThinkNote',
 		categories: {
 			thoughts: {
 				label: 'Think&Note',
@@ -84,6 +113,20 @@ export const ui: Record<Locale, UiDict> = {
 			'技术栈：Astro 静态站 + Decap CMS 编辑，部署在 Cloudflare Pages，域名 blog.thinknote.pro。',
 		],
 		switchTo: 'English',
+		save: '保存',
+		saveMenuTitle: '保存这篇文章',
+		saveMenuIntro: '选一种方式带走内容。',
+		saveToNotes: '保存到 ThinkNote',
+		saveToNotesBadge: '推荐',
+		saveToNotesHook: '1:1 导出可编辑 Word（docx）',
+		saveToNotesDesc: '保存后可在插件里继续编辑，版式尽量原样保留，再一键导出完美 docx。',
+		docxDemoLabel: 'docx 导出演示',
+		docxDemoHint: '演示动图加载失败',
+		exportPdf: '导出 PDF',
+		exportPdfDesc: '用浏览器打印成 PDF，适合先留一份离线副本。',
+		cancelSave: '取消',
+		printSlogan: '边聊 · 深想 · 即记 · 即享',
+		printMark: 'via ThinkNote',
 		categories: {
 			thoughts: {
 				label: 'Think&Note',
