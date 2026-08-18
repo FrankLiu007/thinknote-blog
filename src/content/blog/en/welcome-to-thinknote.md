@@ -1,15 +1,15 @@
 ---
 title: 'Welcome to ThinkNote'
-description: 'Think → Note → Share — the blog is live'
+description: 'Chat → Think → Note → Share — the blog is live'
 pubDate: '2026-08-13'
 category: thinknote
 translationKey: welcome-to-thinknote
 heroImage: '/images/placeholders/blog-placeholder-1.jpg'
 ---
 
-ThinkNote follows a short loop: **Think → Note → Share**.
+ThinkNote follows a short loop: **Chat → Think → Note → Share**.
 
-The Obsidian plugin is where thinking becomes a note. This blog is the Share step — writing that has earned a place outside the private vault.
+The plugin is where chatting becomes thinking, then a note. This blog is the Share step — writing that has earned a place outside the private vault.
 
 ## Stack
 

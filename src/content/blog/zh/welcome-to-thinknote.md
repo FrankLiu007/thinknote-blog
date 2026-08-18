@@ -1,15 +1,15 @@
 ---
 title: '欢迎来到 ThinkNote'
-description: 'Think → Note → Share — 博客上线'
+description: 'Chat → Think → Note → Share — 博客上线'
 pubDate: '2026-08-13'
 category: thinknote
 translationKey: welcome-to-thinknote
 heroImage: '/images/placeholders/blog-placeholder-1.jpg'
 ---
 
-ThinkNote 的闭环很短：**Think → Note → Share**。
+ThinkNote 的闭环是：**Chat → Think → Note → Share**。
 
-Obsidian 插件负责把思考落成笔记；这个博客是 Share——那些已经值得走出私人库的文字。
+插件负责在对话里把思考落成笔记；这个博客是 Share——那些已经值得走出私人库的文字。
 
 ## 技术栈
 

@@ -2,7 +2,7 @@
 // You can import this data from anywhere in your site by using the `import` keyword.
 
 export const SITE_TITLE = 'ThinkNote';
-export const SITE_TAGLINE = 'Think → Note → Share';
+export const SITE_TAGLINE = 'Chat → Think → Note → Share';
 
 /** ThinkNote app origin for “Save to notes” CTA. Override via PUBLIC_THINKNOTE_APP_URL. */
 export const THINKNOTE_APP_URL = (

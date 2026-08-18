@@ -40,11 +40,11 @@ type UiDict = {
 
 export const ui: Record<Locale, UiDict> = {
 	en: {
-		siteDescription: 'Think → Note → Share — from private thinking to public notes',
-		tagline: 'Think → Note → Share',
+		siteDescription: 'Chat → Think → Note → Share — from conversation to notes worth sharing',
+		tagline: 'Chat → Think → Note → Share',
 		brandHeadline: 'ThinkNote',
 		brandSupport:
-			'Capture what you think. Shape it into notes. Share what is worth keeping — this blog is that last step.',
+			'Chat to open the question. Think it through. Shape it into notes. Share what is worth keeping — this blog is that last step.',
 		about: 'About',
 		all: 'All',
 		latest: 'Latest',
@@ -54,10 +54,10 @@ export const ui: Record<Locale, UiDict> = {
 		catalog: 'Catalog',
 		catalogIntro: 'Browse by topic:',
 		aboutTitle: 'About ThinkNote',
-		aboutDescription: 'Think → Note → Share: the story behind the plugin and this blog',
+		aboutDescription: 'Chat → Think → Note → Share: the story behind the plugin and this blog',
 		aboutBody: [
-			'ThinkNote starts with a simple loop: Think → Note → Share.',
-			'The Obsidian plugin is where thinking becomes a note — questions, ideas, and structure stay close to your vault. This blog is the Share step: notes that have earned a place outside the private notebook.',
+			'ThinkNote starts with a simple loop: Chat → Think → Note → Share.',
+			'The plugin lives next to AI chat: you ask, think through the reply, and turn it into a note. This blog is the Share step: notes that have earned a place outside the private notebook.',
 			'Expect writing on personal reflections (Think&Note), the plugin and product (ThinkNote Plugin), and keyboard design (Keyboard). Same person, same habit of turning thought into something you can read again.',
 			'Built with Astro, edited via Decap CMS, hosted on Cloudflare Pages at blog.thinknote.pro.',
 		],
@@ -95,10 +95,10 @@ export const ui: Record<Locale, UiDict> = {
 		},
 	},
 	zh: {
-		siteDescription: 'Think → Note → Share — 从私下思考，到可分享的笔记',
-		tagline: 'Think → Note → Share',
+		siteDescription: 'Chat → Think → Note → Share — 从对话里的思考，到可分享的笔记',
+		tagline: 'Chat → Think → Note → Share',
 		brandHeadline: 'ThinkNote',
-		brandSupport: '先想清楚，再写成笔记，最后把值得留下的分享出去——这个博客，就是 Share 那一步。',
+		brandSupport: '先聊清楚，再想明白，写成笔记，最后把值得留下的分享出去——这个博客，就是 Share 那一步。',
 		about: '关于',
 		all: '全部',
 		latest: '最新',
@@ -108,10 +108,10 @@ export const ui: Record<Locale, UiDict> = {
 		catalog: '目录',
 		catalogIntro: '按主题浏览文章：',
 		aboutTitle: '关于 ThinkNote',
-		aboutDescription: 'Think → Note → Share：插件与博客背后的故事',
+		aboutDescription: 'Chat → Think → Note → Share：插件与博客背后的故事',
 		aboutBody: [
-			'ThinkNote 的起点是一条很短的闭环：Think → Note → Share。',
-			'Obsidian 插件负责把思考落成笔记——问题、想法与结构都留在你的库里。这个博客则是 Share：那些已经值得走出私人笔记本的文字。',
+			'ThinkNote 的起点是一条闭环：Chat → Think → Note → Share。',
+			'插件贴着 AI 对话发生：先聊、再想，再把思考落成笔记。这个博客则是 Share：那些已经值得走出私人笔记本的文字。',
 			'这里会写个人随想（Think&Note）、插件与产品（ThinkNote 插件），以及键盘设计（键盘）。同一个人，同一套把想法写成可再读之物的习惯。',
 			'技术栈：Astro 静态站 + Decap CMS 编辑，部署在 Cloudflare Pages，域名 blog.thinknote.pro。',
 		],
