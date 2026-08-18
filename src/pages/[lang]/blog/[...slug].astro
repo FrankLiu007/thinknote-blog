@@ -39,6 +39,6 @@ const translation = findTranslation(allPosts, post, otherLocale(lang));
 const switchPath = translation ? `blog/${getSlugFromId(translation.id)}` : '';
 ---
 
-<BlogPost lang={lang} switchPath={switchPath} {...post.data}>
+<BlogPost lang={lang} switchPath={switchPath} markdown={post.body ?? ''} {...post.data}>
 	<Content />
 </BlogPost>

@@ -20,6 +20,7 @@ type Props = {
 	updatedDate?: Date;
 	heroImage?: string | ImageMetadata;
 	category?: CategorySlug;
+	markdown?: string;
 };
 
 const {
@@ -31,10 +32,17 @@ const {
 	updatedDate,
 	heroImage,
 	category,
+	markdown = '',
 } = Astro.props;
 const copy = t(lang);
 const categoryMeta = category ? copy.categories[category] : undefined;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href;
+const heroImageUrl =
+	typeof heroImage === 'string'
+		? new URL(heroImage.startsWith('/') ? heroImage : `/${heroImage}`, Astro.site).href
+		: heroImage && typeof heroImage === 'object' && 'src' in heroImage
+			? new URL(String(heroImage.src), Astro.site).href
+			: '';
 ---
 
 <html lang={localeHtmlLang[lang]}>
@@ -134,6 +142,12 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href;
 			</article>
 		</main>
 		<Footer lang={lang} />
-		<SaveArticleMenu lang={lang} canonicalUrl={canonicalUrl} />
+		<SaveArticleMenu
+			lang={lang}
+			canonicalUrl={canonicalUrl}
+			title={title}
+			markdown={markdown}
+			heroImage={heroImageUrl}
+		/>
 	</body>
 </html>

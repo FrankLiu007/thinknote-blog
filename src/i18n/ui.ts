@@ -33,6 +33,7 @@ type UiDict = {
 	exportPdf: string;
 	exportPdfDesc: string;
 	cancelSave: string;
+	saveTooLarge: string;
 	printSlogan: string;
 	printMark: string;
 };
@@ -74,6 +75,8 @@ export const ui: Record<Locale, UiDict> = {
 		exportPdf: 'Export PDF',
 		exportPdfDesc: 'Print to PDF in your browser for a quick offline copy.',
 		cancelSave: 'Cancel',
+		saveTooLarge:
+			'This article is too large to hand off in one jump. Please shorten it, or split it into a shorter post.',
 		printSlogan: 'Chat. Think. Note. Share.',
 		printMark: 'via ThinkNote',
 		categories: {
@@ -125,6 +128,7 @@ export const ui: Record<Locale, UiDict> = {
 		exportPdf: '导出 PDF',
 		exportPdfDesc: '用浏览器打印成 PDF，适合先留一份离线副本。',
 		cancelSave: '取消',
+		saveTooLarge: '这篇文章太长，无法一次带过去。请缩短正文，或拆成更短的文章后再试。',
 		printSlogan: '边聊 · 深想 · 即记 · 即享',
 		printMark: 'via ThinkNote',
 		categories: {

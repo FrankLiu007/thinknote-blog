@@ -6,15 +6,28 @@ import { t } from '../i18n/ui';
 type Props = {
 	lang: Locale;
 	canonicalUrl: string;
+	title: string;
+	markdown: string;
+	heroImage?: string;
 };
 
-const { lang, canonicalUrl } = Astro.props;
+const { lang, canonicalUrl, title, markdown, heroImage = '' } = Astro.props;
 const copy = t(lang);
-const fromBlogUrl = `${THINKNOTE_APP_URL}/from-blog?url=${encodeURIComponent(canonicalUrl)}`;
-const demoGif = `${THINKNOTE_APP_URL}/share-docx-demo-${lang === 'zh' ? 'zh' : 'en'}.gif`;
+const demoGif = `/share-docx-demo-${lang}.gif`;
+/** Escape `<` so markdown cannot close the JSON script tag early. */
+const markdownJson = JSON.stringify(markdown).replace(/</g, '\\u003c');
 ---
 
-<div class="save-fab no-print" data-save-fab>
+<div
+	class="save-fab no-print"
+	data-save-fab
+	data-app-url={THINKNOTE_APP_URL}
+	data-canonical={canonicalUrl}
+	data-title={title}
+	data-hero={heroImage}
+	data-too-large={copy.saveTooLarge}
+>
+	<script type="application/json" data-article-markdown set:html={markdownJson}></script>
 	<button
 		type="button"
 		class="save-fab-btn"
@@ -50,7 +63,7 @@ const demoGif = `${THINKNOTE_APP_URL}/share-docx-demo-${lang === 'zh' ? 'zh' : '
 			<h2 id="save-article-title" class="save-modal-title">{copy.saveMenuTitle}</h2>
 			<p class="save-modal-desc">{copy.saveMenuIntro}</p>
 
-			<a class="save-option save-option-featured" href={fromBlogUrl}>
+			<button type="button" class="save-option save-option-featured" data-save-to-notes>
 				<div class="save-option-head">
 					<span class="save-option-badge">{copy.saveToNotesBadge}</span>
 					<span class="save-option-title">{copy.saveToNotes}</span>
@@ -60,9 +73,8 @@ const demoGif = `${THINKNOTE_APP_URL}/share-docx-demo-${lang === 'zh' ? 'zh' : '
 				<div class="save-demo" aria-hidden="true">
 					<img
 						class="save-demo-gif"
-						src={demoGif}
+						data-src={demoGif}
 						alt=""
-						loading="lazy"
 						data-demo-gif
 					/>
 					<div class="save-demo-placeholder" data-demo-fallback>
@@ -70,7 +82,7 @@ const demoGif = `${THINKNOTE_APP_URL}/share-docx-demo-${lang === 'zh' ? 'zh' : '
 						<span class="save-demo-hint">{copy.docxDemoHint}</span>
 					</div>
 				</div>
-			</a>
+			</button>
 
 			<button type="button" class="save-option save-option-secondary" data-save-pdf>
 				<span class="save-option-title">{copy.exportPdf}</span>
@@ -343,20 +355,87 @@ const demoGif = `${THINKNOTE_APP_URL}/share-docx-demo-${lang === 'zh' ? 'zh' : '
 </style>
 
 <script>
+	/** Keep in sync with website/frontend blogHandoff HANDOFF_MAX_CHARS */
+	const HANDOFF_MAX_CHARS = 16000;
+	const HANDOFF_MARKDOWN_SOFT_BYTES = 12000;
+	const GZIP_PREFIX = 'gz.';
+
+	function bytesToBase64Url(bytes) {
+		let binary = '';
+		for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+		return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+	}
+
+	async function encodeHandoff(payload) {
+		const json = JSON.stringify(payload);
+		const raw = new TextEncoder().encode(json);
+		const plain = bytesToBase64Url(raw);
+		if (typeof CompressionStream === 'undefined') return plain;
+		try {
+			const stream = new Blob([raw]).stream().pipeThrough(new CompressionStream('gzip'));
+			const compressed = new Uint8Array(await new Response(stream).arrayBuffer());
+			const gz = GZIP_PREFIX + bytesToBase64Url(compressed);
+			if (gz.length <= HANDOFF_MAX_CHARS && (gz.length < plain.length || plain.length > HANDOFF_MAX_CHARS)) {
+				return gz;
+			}
+			if (plain.length <= HANDOFF_MAX_CHARS) return plain;
+			return gz.length <= plain.length ? gz : plain;
+		} catch {
+			return plain;
+		}
+	}
+
+	async function buildHandoffUrl(appBase, payload) {
+		const base = (appBase || '').replace(/\/$/, '');
+		const mdBytes = new TextEncoder().encode(payload.markdown || '').length;
+		// Keep articles reasonably sized; gzip helps but browsers still cap URL/hash length
+		if (mdBytes > HANDOFF_MARKDOWN_SOFT_BYTES * 2) {
+			return null;
+		}
+		const encoded = await encodeHandoff(payload);
+		if (encoded.length <= HANDOFF_MAX_CHARS) {
+			return `${base}/from-blog#d=${encoded}`;
+		}
+		return null;
+	}
+
 	function initSaveFab(root) {
 		const openBtn = root.querySelector('[data-save-open]');
 		const backdrop = root.querySelector('[data-save-backdrop]');
 		const dialog = root.querySelector('[data-save-dialog]');
 		const closeBtn = root.querySelector('[data-save-close]');
 		const pdfBtn = root.querySelector('[data-save-pdf]');
+		const notesBtn = root.querySelector('[data-save-to-notes]');
 		const demoGif = root.querySelector('[data-demo-gif]');
 		const demoFallback = root.querySelector('[data-demo-fallback]');
+		const mdEl = root.querySelector('[data-article-markdown]');
 		if (!openBtn || !backdrop || !dialog) return;
+
+		const revealDemo = () => {
+			demoGif?.classList.add('is-visible');
+			demoFallback?.classList.add('is-hidden');
+		};
+
+		const resetDemo = () => {
+			demoGif?.classList.remove('is-visible');
+			demoFallback?.classList.remove('is-hidden');
+		};
+
+		const ensureDemoSrc = () => {
+			if (!demoGif) return;
+			const src = demoGif.getAttribute('data-src');
+			if (src && demoGif.getAttribute('src') !== src) {
+				demoGif.src = src;
+				return;
+			}
+			if (demoGif.complete && demoGif.naturalWidth > 0) revealDemo();
+		};
 
 		const open = () => {
 			backdrop.hidden = false;
 			openBtn.setAttribute('aria-expanded', 'true');
 			dialog.focus();
+			ensureDemoSrc();
 		};
 
 		const close = () => {
@@ -375,19 +454,35 @@ const demoGif = `${THINKNOTE_APP_URL}/share-docx-demo-${lang === 'zh' ? 'zh' : '
 			close();
 			window.setTimeout(() => window.print(), 50);
 		});
+		notesBtn?.addEventListener('click', () => {
+			void (async () => {
+				let markdown = '';
+				try {
+					markdown = mdEl ? JSON.parse(mdEl.textContent || '""') : '';
+				} catch {
+					markdown = '';
+				}
+				const payload = {
+					title: root.getAttribute('data-title') || 'Untitled',
+					markdown,
+					canonical: root.getAttribute('data-canonical') || '',
+					heroImage: root.getAttribute('data-hero') || null,
+				};
+				const href = await buildHandoffUrl(root.getAttribute('data-app-url') || '', payload);
+				if (!href) {
+					window.alert(root.getAttribute('data-too-large') || 'Article is too large to hand off.');
+					return;
+				}
+				window.location.href = href;
+			})();
+		});
 		document.addEventListener('keydown', (event) => {
 			if (event.key === 'Escape' && !backdrop.hidden) close();
 		});
 
 		if (demoGif && demoFallback) {
-			demoGif.addEventListener('load', () => {
-				demoGif.classList.add('is-visible');
-				demoFallback.classList.add('is-hidden');
-			});
-			demoGif.addEventListener('error', () => {
-				demoGif.classList.remove('is-visible');
-				demoFallback.classList.remove('is-hidden');
-			});
+			demoGif.addEventListener('load', revealDemo);
+			demoGif.addEventListener('error', resetDemo);
 		}
 	}
 
