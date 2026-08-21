@@ -7,7 +7,18 @@ import { defineConfig, fontProviders } from 'astro/config';
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://blog.thinknote.pro',
-	integrations: [mdx(), sitemap()],
+	integrations: [
+		mdx(),
+		sitemap({
+			filter: (page) => {
+				const { pathname } = new URL(page);
+				if (pathname === '/' || pathname === '') return false;
+				if (pathname.startsWith('/admin')) return false;
+				if (pathname.startsWith('/api')) return false;
+				return true;
+			},
+		}),
+	],
 	i18n: {
 		defaultLocale: 'en',
 		locales: ['en', 'zh'],

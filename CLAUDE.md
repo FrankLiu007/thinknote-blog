@@ -1,3 +1,7 @@
+## Writing materials
+
+Raw sources (ThinkNote exports, chat dumps, unused reference images) go in `materials/<post-slug>/`, not `src/content/blog/`. That folder is a content collection and would publish or fail the build. Images already used in a post stay in `public/images/uploads/`.
+
 ## Development
 
 When starting the dev server, use background mode:

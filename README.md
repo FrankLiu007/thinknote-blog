@@ -48,9 +48,10 @@ Decap 配置：[`public/admin/config.yml`](public/admin/config.yml)
 
 | 路径 | 说明 |
 |------|------|
-| `src/content/blog/{en,zh}/` | 中英文文章 |
+| `src/content/blog/{en,zh}/` | 中英文已发布文章 |
+| `materials/` | 写作素材（对话导出、大纲、未上线参考图），不发布 |
 | `public/admin/` | Decap 入口与配置 |
-| `public/images/uploads/` | CMS 上传目录 |
+| `public/images/uploads/` | 文章用图（需要公开 URL） |
 | `worker.js` | GitHub OAuth（`/api/auth`） |
 | `wrangler.toml` | Cloudflare Worker 部署配置 |
 

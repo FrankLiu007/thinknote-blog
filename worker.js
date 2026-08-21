@@ -77,9 +77,26 @@ async function handleAuth(request, env) {
 	return Response.redirect(redirectUrl.href, 302);
 }
 
+/** Prefer zh when Accept-Language lists a Chinese tag; otherwise English. */
+function homeLocale(acceptLanguage) {
+	const header = (acceptLanguage || '').toLowerCase();
+	const tags = header.split(',').map((part) => part.trim().split(';')[0].trim());
+	if (tags.some((tag) => tag === 'zh' || tag.startsWith('zh-'))) {
+		return 'zh';
+	}
+	return 'en';
+}
+
 export default {
 	async fetch(request, env) {
 		const url = new URL(request.url);
+
+		if (url.pathname === '/' || url.pathname === '') {
+			const locale = homeLocale(request.headers.get('Accept-Language'));
+			const dest = new URL(`/${locale}/`, url.origin);
+			dest.search = url.search;
+			return Response.redirect(dest, 302);
+		}
 
 		if (url.pathname === '/api/auth' || url.pathname === '/api/auth/') {
 			try {

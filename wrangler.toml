@@ -5,5 +5,5 @@ compatibility_date = "2025-08-01"
 [assets]
 directory = "./dist"
 binding = "ASSETS"
-# Ensure /api/* hits the Worker before static asset lookup
-run_worker_first = ["/api/*"]
+# / must hit the Worker so locale 302 runs before any leftover index.html
+run_worker_first = ["/", "/api/*"]

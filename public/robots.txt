@@ -1,5 +1,7 @@
 User-agent: *
 Allow: /
 
-Disallow: /admin/
-Disallow: /api/
+Disallow: /admin
+Disallow: /api
+
+Sitemap: https://blog.thinknote.pro/sitemap-index.xml
