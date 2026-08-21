@@ -6,7 +6,7 @@ export const SITE_TAGLINE = 'Chat → Think → Note → Share';
 
 /** ThinkNote app origin for “Save to notes” CTA. Override via PUBLIC_THINKNOTE_APP_URL. */
 export const THINKNOTE_APP_URL = (
-	import.meta.env.PUBLIC_THINKNOTE_APP_URL || 'https://test.thinknote.pro'
+	import.meta.env.PUBLIC_THINKNOTE_APP_URL || 'https://thinknote.pro'
 ).replace(/\/$/, '');
 
 export const CATEGORIES = {
