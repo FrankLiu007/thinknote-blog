@@ -95,7 +95,7 @@ export default {
 			const locale = homeLocale(request.headers.get('Accept-Language'));
 			const dest = new URL(`/${locale}/`, url.origin);
 			dest.search = url.search;
-			return Response.redirect(dest, 302);
+			return Response.redirect(dest, 301);
 		}
 
 		if (url.pathname === '/api/auth' || url.pathname === '/api/auth/') {

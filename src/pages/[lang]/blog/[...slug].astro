@@ -37,8 +37,21 @@ const allPosts = await getCollection('blog');
 const translation = findTranslation(allPosts, post, otherLocale(lang));
 // Prefer the sibling translation; otherwise fall back to the other locale home.
 const switchPath = translation ? `blog/${getSlugFromId(translation.id)}` : '';
+const slug = getSlugFromId(post.id);
+const alternatePaths: Partial<Record<Locale, string>> = {
+	[lang]: `blog/${slug}`,
+};
+if (translation) {
+	alternatePaths[otherLocale(lang)] = `blog/${getSlugFromId(translation.id)}`;
+}
 ---
 
-<BlogPost lang={lang} switchPath={switchPath} markdown={post.body ?? ''} {...post.data}>
+<BlogPost
+	lang={lang}
+	switchPath={switchPath}
+	alternatePaths={alternatePaths}
+	markdown={post.body ?? ''}
+	{...post.data}
+>
 	<Content />
 </BlogPost>

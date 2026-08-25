@@ -7,20 +7,37 @@ import FallbackImage from '../assets/blog-placeholder-1.jpg';
 import { SITE_TITLE } from '../consts';
 import { Font } from 'astro:assets';
 import type { Locale } from '../i18n/config';
-import { localePath } from '../i18n/utils';
+import {
+	buildHreflangAlternates,
+	buildHreflangForPath,
+	localePath,
+	type HreflangAlternate,
+} from '../i18n/utils';
 
 interface Props {
 	title: string;
 	description: string;
 	image?: ImageMetadata;
 	lang?: Locale;
+	/** Same path in all locales, e.g. '' | 'about' | 'blog/category/foo'. */
+	i18nPath?: string;
+	/** Per-locale paths when equivalents differ (e.g. translated blog posts). */
+	alternatePaths?: Partial<Record<Locale, string>>;
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-const { title, description, image = FallbackImage, lang } = Astro.props;
-const rssPath = lang ? localePath(lang, 'rss.xml').replace(/\/$/, '') : '/rss.xml';
+const { title, description, image = FallbackImage, lang, i18nPath, alternatePaths } =
+	Astro.props;
+const rssPath = lang ? localePath(lang, 'rss.xml').replace(/\/$/, '') : '/en/rss.xml';
 const rssHref = new URL(rssPath.replace(/^\//, ''), Astro.site);
+
+let hreflangAlternates: HreflangAlternate[] = [];
+if (alternatePaths) {
+	hreflangAlternates = buildHreflangAlternates(Astro.site, alternatePaths);
+} else if (lang !== undefined && i18nPath !== undefined) {
+	hreflangAlternates = buildHreflangForPath(Astro.site, i18nPath);
+}
 ---
 
 <!-- Global Metadata -->
@@ -57,6 +74,11 @@ const rssHref = new URL(rssPath.replace(/^\//, ''), Astro.site);
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
+{
+	hreflangAlternates.map(({ hreflang, href }) => (
+		<link rel="alternate" hreflang={hreflang} href={href} />
+	))
+}
 
 <!-- Primary Meta Tags -->
 <title>{title}</title>
@@ -64,14 +86,14 @@ const rssHref = new URL(rssPath.replace(/^\//, ''), Astro.site);
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website" />
-<meta property="og:url" content={Astro.url} />
+<meta property="og:url" content={canonicalURL} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={new URL(image.src, Astro.url)} />
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:url" content={Astro.url} />
+<meta name="twitter:url" content={canonicalURL} />
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={new URL(image.src, Astro.url)} />

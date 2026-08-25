@@ -14,7 +14,7 @@ export const onRequest = defineMiddleware((context, next) => {
 	const { pathname } = context.url;
 	if (pathname === '/' || pathname === '') {
 		const locale = homeLocale(context.request.headers.get('Accept-Language'));
-		return context.redirect(`/${locale}/`, 302);
+		return context.redirect(`/${locale}/`, 301);
 	}
 	return next();
 });

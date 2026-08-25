@@ -14,6 +14,7 @@ import { categoryPath } from '../i18n/utils';
 type Props = {
 	lang: Locale;
 	switchPath?: string;
+	alternatePaths?: Partial<Record<Locale, string>>;
 	title: string;
 	description: string;
 	pubDate: Date;
@@ -26,6 +27,7 @@ type Props = {
 const {
 	lang,
 	switchPath = '',
+	alternatePaths,
 	title,
 	description,
 	pubDate,
@@ -47,7 +49,12 @@ const heroImageUrl =
 
 <html lang={localeHtmlLang[lang]}>
 	<head>
-		<BaseHead title={title} description={description} lang={lang} />
+		<BaseHead
+			title={title}
+			description={description}
+			lang={lang}
+			alternatePaths={alternatePaths}
+		/>
 		<style>
 			main {
 				width: var(--page-width);

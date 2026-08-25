@@ -28,7 +28,7 @@ export async function GET(context) {
 	return rss({
 		title: SITE_TITLE,
 		description: copy.siteDescription,
-		site: context.site,
+		site: new URL(`/${lang}/`, context.site),
 		items: posts.map((post) => ({
 			title: post.data.title,
 			description: post.data.description,

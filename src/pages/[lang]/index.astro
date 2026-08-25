@@ -28,7 +28,7 @@ const posts = filterPostsByLocale(await getCollection('blog'), lang).sort(
 <!doctype html>
 <html lang={localeHtmlLang[lang]}>
 	<head>
-		<BaseHead title={SITE_TITLE} description={copy.siteDescription} lang={lang} />
+		<BaseHead title={SITE_TITLE} description={copy.siteDescription} lang={lang} i18nPath="" />
 		<style>
 			main {
 				width: var(--page-width);

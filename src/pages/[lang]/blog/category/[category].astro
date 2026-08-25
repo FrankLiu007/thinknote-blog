@@ -38,6 +38,7 @@ const posts = filterPostsByLocale(await getCollection('blog'), lang)
 			title={`${meta.label} | ${SITE_TITLE}`}
 			description={meta.description}
 			lang={lang}
+			i18nPath={`blog/category/${slug}`}
 		/>
 		<style>
 			main {

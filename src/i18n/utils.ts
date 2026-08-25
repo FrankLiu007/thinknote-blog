@@ -1,6 +1,11 @@
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import type { CollectionEntry } from 'astro:content';
-import { defaultLocale, isLocale, type Locale, locales } from './config';
+import { defaultLocale, isLocale, localeHtmlLang, type Locale, locales } from './config';
+
+export type HreflangAlternate = {
+	hreflang: string;
+	href: string;
+};
 
 export function getLocaleFromUrl(pathname: string): Locale {
 	const segment = pathname.replace(/^\//, '').split('/')[0];
@@ -63,4 +68,47 @@ export function otherLocale(lang: Locale): Locale {
 
 export function getStaticLocalePaths() {
 	return locales.map((lang) => ({ params: { lang } }));
+}
+
+export function absoluteLocaleUrl(site: URL | string, lang: Locale, path = ''): string {
+	return new URL(localePath(lang, path), site).href;
+}
+
+/** Build hreflang alternates; omit locales that have no equivalent page. */
+export function buildHreflangAlternates(
+	site: URL | string,
+	paths: Partial<Record<Locale, string>>,
+): HreflangAlternate[] {
+	const alternates: HreflangAlternate[] = [];
+
+	for (const lang of locales) {
+		const path = paths[lang];
+		if (path === undefined) continue;
+		alternates.push({
+			hreflang: localeHtmlLang[lang],
+			href: absoluteLocaleUrl(site, lang, path),
+		});
+	}
+
+	const defaultPath = paths[defaultLocale];
+	if (defaultPath !== undefined) {
+		alternates.push({
+			hreflang: 'x-default',
+			href: absoluteLocaleUrl(site, defaultLocale, defaultPath),
+		});
+	}
+
+	return alternates;
+}
+
+/** Same path segment in every locale, e.g. '' | 'about' | 'blog/category/foo'. */
+export function buildHreflangForPath(
+	site: URL | string,
+	path = '',
+): HreflangAlternate[] {
+	const paths = Object.fromEntries(locales.map((lang) => [lang, path])) as Record<
+		Locale,
+		string
+	>;
+	return buildHreflangAlternates(site, paths);
 }

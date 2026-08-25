@@ -28,9 +28,9 @@ export default defineConfig({
 		},
 	},
 	redirects: {
-		'/blog': '/',
-		'/about': '/zh/about',
-		'/blog/welcome-to-thinknote': '/zh/blog/welcome-to-thinknote',
+		'/blog': '/en/',
+		'/about': '/en/about',
+		'/blog/welcome-to-thinknote': '/en/blog/welcome-to-thinknote',
 	},
 	fonts: [
 		{
