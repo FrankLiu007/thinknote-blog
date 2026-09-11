@@ -9,7 +9,7 @@
 
 Workers & Pages → 项目 → Settings → Builds：
 
-- **Build command**: `npm run build`
+- **Build command**: `pnpm run build`
 - **Deploy command / 输出**: 以 `wrangler.toml` 为准（`dist` + `worker.js`）
 - **Root directory**: 留空
 - 环境变量（Production）：
@@ -34,9 +34,9 @@ GitHub → Settings → Developer settings → OAuth Apps：
 ## 本地开发
 
 ```powershell
-npm run dev   # http://localhost:4321
+pnpm run dev   # http://localhost:4321
 # CMS 本地代理（可选）：把 config.yml 的 local_backend 临时改为 true，再：
-npm run cms
+pnpm run cms
 ```
 
 ## 相关文件

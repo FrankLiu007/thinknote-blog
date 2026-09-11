@@ -4,7 +4,6 @@ description: 'Chat → Think → Note → Share — 博客上线'
 pubDate: '2026-08-13'
 category: thinknote
 translationKey: welcome-to-thinknote
-heroImage: '/images/placeholders/blog-placeholder-1.jpg'
 ---
 
 ThinkNote 的闭环是：**Chat → Think → Note → Share**。

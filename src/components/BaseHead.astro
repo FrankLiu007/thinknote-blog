@@ -17,7 +17,8 @@ import {
 interface Props {
 	title: string;
 	description: string;
-	image?: ImageMetadata;
+	/** Cover URL (`/images/...`) or a bundled asset. Missing → site fallback. */
+	image?: string | ImageMetadata;
 	lang?: Locale;
 	/** Same path in all locales, e.g. '' | 'about' | 'blog/category/foo'. */
 	i18nPath?: string;
@@ -27,8 +28,14 @@ interface Props {
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-const { title, description, image = FallbackImage, lang, i18nPath, alternatePaths } =
-	Astro.props;
+const { title, description, image, lang, i18nPath, alternatePaths } = Astro.props;
+const resolvedImage =
+	typeof image === 'string' ? image.trim() : image;
+const ogImage = resolvedImage || FallbackImage;
+const ogImageHref =
+	typeof ogImage === 'string'
+		? new URL(ogImage, Astro.url)
+		: new URL(ogImage.src, Astro.url);
 const rssPath = lang ? localePath(lang, 'rss.xml').replace(/\/$/, '') : '/en/rss.xml';
 const rssHref = new URL(rssPath.replace(/^\//, ''), Astro.site);
 
@@ -89,11 +96,11 @@ if (alternatePaths) {
 <meta property="og:url" content={canonicalURL} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
-<meta property="og:image" content={new URL(image.src, Astro.url)} />
+<meta property="og:image" content={ogImageHref} />
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:url" content={canonicalURL} />
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
-<meta name="twitter:image" content={new URL(image.src, Astro.url)} />
+<meta name="twitter:image" content={ogImageHref} />

@@ -26,6 +26,7 @@ const markdownJson = JSON.stringify(markdown).replace(/</g, '\\u003c');
 	data-title={title}
 	data-hero={heroImage}
 	data-too-large={copy.saveTooLarge}
+	data-popup-blocked={copy.savePopupBlocked}
 >
 	<script type="application/json" data-article-markdown set:html={markdownJson}></script>
 	<button
@@ -355,10 +356,15 @@ const markdownJson = JSON.stringify(markdown).replace(/</g, '\\u003c');
 </style>
 
 <script>
-	/** Keep in sync with website/frontend blogHandoff HANDOFF_MAX_CHARS */
+	/** Keep in sync with website/frontend blogHandoff HANDOFF_MAX_CHARS / BLOG_HANDOFF_MSG */
 	const HANDOFF_MAX_CHARS = 16000;
 	const HANDOFF_MARKDOWN_SOFT_BYTES = 12000;
 	const GZIP_PREFIX = 'gz.';
+	const MSG_READY = 'thinknote-blog-ready';
+	const MSG_HANDOFF = 'thinknote-blog-handoff';
+	const MSG_ACK = 'thinknote-blog-ack';
+	const POPUP_NAME = 'thinknote-from-blog';
+	const ACK_TIMEOUT_MS = 12000;
 
 	function bytesToBase64Url(bytes) {
 		let binary = '';
@@ -388,7 +394,6 @@ const markdownJson = JSON.stringify(markdown).replace(/</g, '\\u003c');
 	async function buildHandoffUrl(appBase, payload) {
 		const base = (appBase || '').replace(/\/$/, '');
 		const mdBytes = new TextEncoder().encode(payload.markdown || '').length;
-		// Keep articles reasonably sized; gzip helps but browsers still cap URL/hash length
 		if (mdBytes > HANDOFF_MARKDOWN_SOFT_BYTES * 2) {
 			return null;
 		}
@@ -397,6 +402,69 @@ const markdownJson = JSON.stringify(markdown).replace(/</g, '\\u003c');
 			return `${base}/from-blog#d=${encoded}`;
 		}
 		return null;
+	}
+
+	function appOrigin(appBase) {
+		try {
+			return new URL(appBase).origin;
+		} catch {
+			return '';
+		}
+	}
+
+	function collectImageRefs(markdown, hero) {
+		const refs = [];
+		const seen = new Set();
+		const add = (raw) => {
+			const url = (raw || '').trim();
+			if (!url || url.startsWith('data:') || url.startsWith('blob:')) return;
+			let path = '';
+			try {
+				if (url.startsWith('/')) path = url.split('?')[0];
+				else path = new URL(url, window.location.origin).pathname;
+			} catch {
+				return;
+			}
+			if (!path || seen.has(path)) return;
+			seen.add(path);
+			refs.push({ url, path });
+		};
+		add(hero);
+		const re = /!\[[^\]]*\]\(\s*<?([^)\s>]+)>?/g;
+		let match;
+		while ((match = re.exec(markdown || ''))) add(match[1]);
+		return refs;
+	}
+
+	async function fetchBlogImages(refs) {
+		const origin = window.location.origin;
+		const images = [];
+		for (const ref of refs) {
+			let abs;
+			try {
+				abs = new URL(ref.path, origin).href;
+				if (new URL(abs).origin !== origin) continue;
+			} catch {
+				continue;
+			}
+			try {
+				const res = await fetch(abs);
+				if (!res.ok) continue;
+				const blob = await res.blob();
+				if (!blob || blob.size === 0) continue;
+				const name = ref.path.split('/').filter(Boolean).pop() || 'image.png';
+				images.push({
+					url: ref.url,
+					path: ref.path,
+					blob,
+					mime: blob.type || 'image/png',
+					name,
+				});
+			} catch {
+				/* skip missing images */
+			}
+		}
+		return images;
 	}
 
 	function initSaveFab(root) {
@@ -410,6 +478,23 @@ const markdownJson = JSON.stringify(markdown).replace(/</g, '\\u003c');
 		const demoFallback = root.querySelector('[data-demo-fallback]');
 		const mdEl = root.querySelector('[data-article-markdown]');
 		if (!openBtn || !backdrop || !dialog) return;
+
+		const appBase = (root.getAttribute('data-app-url') || '').replace(/\/$/, '');
+		const targetOrigin = appOrigin(appBase);
+		let lastHandoffMessage = null;
+		let popupRef = null;
+
+		window.addEventListener('message', (event) => {
+			if (!targetOrigin || event.origin !== targetOrigin) return;
+			if (!lastHandoffMessage) return;
+			if (!event.data || event.data.type !== MSG_READY) return;
+			if (!popupRef || popupRef.closed) return;
+			try {
+				popupRef.postMessage(lastHandoffMessage, targetOrigin);
+			} catch {
+				/* ignore */
+			}
+		});
 
 		const revealDemo = () => {
 			demoGif?.classList.add('is-visible');
@@ -468,10 +553,53 @@ const markdownJson = JSON.stringify(markdown).replace(/</g, '\\u003c');
 					canonical: root.getAttribute('data-canonical') || '',
 					heroImage: root.getAttribute('data-hero') || null,
 				};
-				const href = await buildHandoffUrl(root.getAttribute('data-app-url') || '', payload);
+				const appBaseNow = (root.getAttribute('data-app-url') || '').replace(/\/$/, '');
+				const originNow = appOrigin(appBaseNow);
+
+				let popup = null;
+				try {
+					popup = window.open(`${appBaseNow}/from-blog`, POPUP_NAME);
+				} catch {
+					popup = null;
+				}
+				if (popup && popup.closed) popup = null;
+
+				const images = await fetchBlogImages(collectImageRefs(markdown, payload.heroImage));
+				lastHandoffMessage = {
+					type: MSG_HANDOFF,
+					title: payload.title,
+					markdown: payload.markdown,
+					canonical: payload.canonical,
+					heroImage: payload.heroImage,
+					images,
+				};
+
+				if (popup && originNow) {
+					popupRef = popup;
+					const started = Date.now();
+					while (Date.now() - started < ACK_TIMEOUT_MS) {
+						if (popup.closed) break;
+						try {
+							popup.postMessage(lastHandoffMessage, originNow);
+						} catch {
+							/* ignore */
+						}
+						await new Promise((resolve) => window.setTimeout(resolve, 350));
+					}
+					close();
+					return;
+				}
+
+				const href = await buildHandoffUrl(appBase, payload);
 				if (!href) {
 					window.alert(root.getAttribute('data-too-large') || 'Article is too large to hand off.');
 					return;
+				}
+				if (!popup) {
+					window.alert(
+						root.getAttribute('data-popup-blocked') ||
+							'Please allow pop-ups so images can be sent to ThinkNote.'
+					);
 				}
 				window.location.href = href;
 			})();

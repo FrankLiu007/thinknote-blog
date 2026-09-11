@@ -4,7 +4,6 @@ description: 'Chat → Think → Note → Share — the blog is live'
 pubDate: '2026-08-13'
 category: thinknote
 translationKey: welcome-to-thinknote
-heroImage: '/images/placeholders/blog-placeholder-1.jpg'
 ---
 
 ThinkNote follows a short loop: **Chat → Think → Note → Share**.

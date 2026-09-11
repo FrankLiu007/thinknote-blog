@@ -38,12 +38,13 @@ const {
 } = Astro.props;
 const copy = t(lang);
 const categoryMeta = category ? copy.categories[category] : undefined;
-const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href;
+/** Handoff must use the origin the reader is on (localhost in dev, not Astro.site). */
+const handoffCanonical = new URL(Astro.url.pathname, Astro.url.origin).href;
 const heroImageUrl =
 	typeof heroImage === 'string'
-		? new URL(heroImage.startsWith('/') ? heroImage : `/${heroImage}`, Astro.site).href
+		? heroImage
 		: heroImage && typeof heroImage === 'object' && 'src' in heroImage
-			? new URL(String(heroImage.src), Astro.site).href
+			? new URL(String(heroImage.src), Astro.url.origin).href
 			: '';
 ---
 
@@ -54,6 +55,7 @@ const heroImageUrl =
 			description={description}
 			lang={lang}
 			alternatePaths={alternatePaths}
+			image={heroImageUrl || undefined}
 		/>
 		<style>
 			main {
@@ -112,16 +114,17 @@ const heroImageUrl =
 		<Header lang={lang} switchPath={switchPath} />
 		<main>
 			<article>
-				<div class="hero-image">
-					{
-						heroImage &&
-							(typeof heroImage === 'string' ? (
+				{
+					heroImage && (
+						<div class="hero-image">
+							{typeof heroImage === 'string' ? (
 								<img width={1200} height={630} src={heroImage} alt="" />
 							) : (
 								<Image width={1200} height={630} src={heroImage} alt="" />
-							))
-					}
-				</div>
+							)}
+						</div>
+					)
+				}
 				<div class="prose">
 					<div class="title">
 						{
@@ -151,7 +154,7 @@ const heroImageUrl =
 		<Footer lang={lang} />
 		<SaveArticleMenu
 			lang={lang}
-			canonicalUrl={canonicalUrl}
+			canonicalUrl={handoffCanonical}
 			title={title}
 			markdown={markdown}
 			heroImage={heroImageUrl}

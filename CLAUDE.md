@@ -2,6 +2,8 @@
 
 Raw sources (ThinkNote exports, chat dumps, unused reference images) go in `materials/<post-slug>/`, not `src/content/blog/`. That folder is a content collection and would publish or fail the build. Images already used in a post stay in `public/images/uploads/`.
 
+`heroImage` in frontmatter is optional. Leave it off unless the image belongs to that post. Do not reuse placeholders or unrelated screenshots as a cover.
+
 ## Development
 
 When starting the dev server, use background mode:

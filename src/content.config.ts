@@ -13,7 +13,7 @@ const blog = defineCollection({
 		// Transform string to Date object
 		pubDate: z.coerce.date(),
 		updatedDate: z.coerce.date().optional(),
-		// Public URL path (e.g. /images/uploads/cover.jpg) for Decap CMS compatibility
+		// Optional cover. Only set when the image belongs to this post.
 		heroImage: z.string().optional(),
 		category: z.enum(CATEGORY_SLUGS),
 		// Shared key linking zh/en versions of the same post
