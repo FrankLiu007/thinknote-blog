@@ -8,6 +8,8 @@ Raw sources (ThinkNote exports, chat dumps, unused reference images) go in `mate
 
 ## Development
 
+Use `pnpm` for local installation, development servers, CMS, builds, and previews. Docker or hosting-provider bootstrap commands may use their own image tooling.
+
 When starting the dev server, use background mode:
 
 ```
