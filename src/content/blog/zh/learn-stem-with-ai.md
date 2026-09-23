@@ -73,6 +73,6 @@ AI 很擅长写出「看起来已经完成」的证明。看起来完成，往�
 
 写不出，就是那个细节还没懂。再把公式贴回去问，而不是再要一份更长的解答。
 
-左边继续和模型把那一步吵清楚，右边把式子和假设记下——具体怎么摆这两边，见 [左边聊天、右边整理](/zh/blog/ai-writing-workflow-sidepanel)。产品长什么样，见 [ThinkNote 是什么](/zh/blog/what-is-thinknote)。
+左边继续和模型把那一步聊清楚，右边把式子和假设记下——具体怎么摆这两边，见 [左边聊天、右边整理](/zh/blog/ai-writing-workflow-sidepanel)。产品长什么样，见 [ThinkNote 是什么](/zh/blog/what-is-thinknote)。
 
 理科学习最怕的不是不会问，是问了却问不精确，精确了却没有留下来。⚓ 公式是锚。锚在，下一问才接得上；细节才问得完。

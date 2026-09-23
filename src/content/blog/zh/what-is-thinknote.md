@@ -4,7 +4,7 @@ description: '答案可以来自 AI，判断要留在你这边。边聊边想，
 pubDate: '2026-09-13'
 category: thinknote
 translationKey: what-is-thinknote
-heroImage: '/images/uploads/what-is-thinknote-hero.png'
+heroImage: '/images/uploads/what-is-thinknote-hero-zh.webp'
 ---
 
 用 AI 最快乐的瞬间，往往也是最容易空手离开的瞬间。
@@ -15,19 +15,18 @@ heroImage: '/images/uploads/what-is-thinknote-hero.png'
 
 答案可以来自模型。判断，得留在你这边。
 
-## 🧠 亲手碰上的事很少，大部分都是「听来的」
+## 🧠 亲身经历很少，大部分知识都是「听来的」
 
-靠做、靠讲、靠反复用，当然能学会。可它们很贵：要场合、要对象、要一整段空出来的时间。人一辈子能亲手碰上的事，其实没多少。
+靠做、靠讲、靠反复用，当然能学会。可这些路径很贵：要场合、要对象、要一整段空出来的时间。人一辈子能亲手碰上的事，其实没多少。
 
 我们真正靠的，一直是间接经验——书、课、别人随口说的那句，现在再加上 AI。它把「听来的」变得又多又便宜，便宜到你一不小心就会整段吞下去。
 
 经历过，也不等于懂。亲身碰上的，同样可能是错觉、偏见，或者碰巧对了一次。没经历过，也未必不能懂。要获得比较正确的认识，靠的是停下来想一想，再用自己的话过一遍。
 
-间接经验只要被追问过、用自己的句子说过，一样可以变成你的判断。写下来，就是在做这件事。
+间接经验只要被追问、再用自己的句子说一遍，一样可以变成你的判断。写下来，就是在做这件事。
 
-进笔记的，最好是你咀嚼过的那句。整段剪进去，看起来很勤奋，其实还是把思考交出去了。白天在侧栏留一点痕迹，晚上睡觉的时候，记忆才有东西可收拾。侧栏不是档案柜，更像口袋：那句好话出现了，就塞进去。
+进笔记的，最好是你咀嚼过的那句。整段剪进去，看起来很勤奋，其实还是把思考交出去了。白天在侧栏留一点痕迹，晚上睡觉时，记忆才有东西可以整理。侧栏不是档案柜，更像口袋：那句好话出现了，就塞进去。
 
-![侧栏像口袋：好句子出现了，就塞进去](/images/uploads/what-is-thinknote-pocket.png)
 
 ## ✍️ Chat ↔ Think，再 Note、Share
 
@@ -35,15 +34,16 @@ heroImage: '/images/uploads/what-is-thinknote-hero.png'
 Chat ↔ Think
     → Note
     → Share
+    ↺ 再编辑
 ```
 
-![Chat ↔ Think，再 Note、Share](/images/uploads/what-is-thinknote-loop.png)
+![Chat ↔ Think，再 Note、Share](/images/uploads/what-is-thinknote-loop.webp)
 
 **Chat 和 Think 是来回的。** 问完停一下：哪句可信、哪步还糊、用自己的话能说出什么。想清楚了，再问下一句。像聊天，也像把刚听来的话在嘴里过一遍。过完，它才算是你的。
 
 **Note 是把火花按住。** 那一下出现了就写。写完，它才算真正来过——不然第二天，你只会记得「当时挺亮的」。
 
-**Share 是把想过的交出去。** 给自己以后复习，也给别人打开。稿子要见人，才不容易糊成一团。见人之前，你会突然认真起来，这是好事。要讲清楚，自己就得再想一层：哪里其实还没懂，哪句经不起问。费曼那套能学得更好，靠的也是这个压力——教会别人，才知道自己会不会。分享会让你想得更多、更深，正因为对面真的有人。
+**Share 是把想过的交出去。** 给自己以后复习，也给别人打开。稿子要见人，才不容易糊成一团。见人之前，你会突然认真起来，这是好事。要讲清楚，自己就得再想一层：哪里其实还没懂，哪句经不起问。所谓费曼技巧，靠的也是这个压力——教会别人，才知道自己到底会不会。分享会让你想得更多、更深，正因为对面真的有人。
 
 我自己是靠想、记、再回头看，才一点点长起来的。做、讲、用同样重要，只是它们不总在手边。希望这套流程，能帮到也想像这样把思考留在自己这边的人。
 
@@ -55,28 +55,27 @@ Chat ↔ Think
 
 - **Ask Precisely / 问得准**：用 Precise Chat 带着公式和结构提问，而不是在普通输入框里含糊地「那个再讲讲」。
 - **Think Deep / 深想**：把回复里真正有用的片段（含公式）拎出来再问，用自己的话接住，而不是整段吞下去。
-- **Note Now / 即记**：右侧 Sidepanel 边聊边写。本地可离线；登录后可按配额云同步。
-- **Share Now / 即享**：导出，或一键贴进桌面 Word / WPS，公式是原生可编辑公式。可以是侧栏里整理过的，也可以是聊天原文——工作本来就在 Word 里的人，要的是快接回去。
+- **Note Now / 即记**：右侧 Sidepanel 边聊边写。笔记可以先留在本地，离线也能写；登录后再按账号配额同步到云端。
+- **Share Now / 即享**：导出，或一键贴进桌面 Word / WPS；公式会转成可编辑的原生公式。可以是侧栏里整理过的，也可以是聊天原文——工作本来就在文档里的人，要的是快接回去。
 
 它不是又一个聊天机器人。模型仍是 ChatGPT、Claude、Gemini、豆包、DeepSeek、元宝、千问、文心。ThinkNote 是长在这些页面上的**笔记本和粘贴层**——你继续聊，它在旁边等你写。
 
-![从对话到笔记再到可编辑 Word](/images/uploads/copy-note-docx.png)
 
 ## 📦 你要装什么
 
 1. **浏览器扩展**（Chrome / Edge）：在 AI 站点显示浮动按钮和侧栏，处理复制与精确对话。安装：[thinknote.pro/install](https://thinknote.pro/install)
-2. **Word / WPS 加载项**：给大多数已经在 Word 里干活的人。聊完一键贴进去，接到原来的工作流上。不是交稿才装。很多事务要处理得快，并不需要每次都深想。桌面 Word（Win / Mac）或 Windows 版 WPS 文字。说明：[thinknote.pro/word](https://thinknote.pro/word)
+2. **Word / WPS 加载项**：给大多数已经在 Word / WPS 里干活的人。聊完一键贴进去，接到原来的工作流上。不是交稿才装。很多事务要处理得快，并不需要每次都深想。支持桌面 Word（Windows / Mac）和 Windows 版 WPS 文字；WPS 需要在任务窗格先点「一键粘贴」，再按 Ctrl+V。说明：[thinknote.pro/word](https://thinknote.pro/word)
 
-网页版 Word 暂时帮不上忙。扩展管聊和记；要进 Word，把加载项也装上。
+网页版 Word 和网页版金山文档暂时帮不上忙。扩展管聊和记；要进桌面 Word / WPS，把对应加载项也装上。
 
 ## 📚 从这里读下去
 
 | 你卡在… | 去这篇 |
 | --- | --- |
 | 理科公式追问不准 | [用 AI 学理科](/zh/blog/learn-stem-with-ai) |
-| 聊完找不到那句好话 | [边聊边记](/zh/blog/note-as-you-chat) |
+| 聊完找不到那句好话 | [边聊AI边记笔记](/zh/blog/note-as-you-chat) |
 | 贴进 Word 排版全乱 | [一键粘贴进 Word](/zh/blog/paste-ai-chat-into-word) |
-| 不想订阅也想常用 | [邀请 5 人终身额度](/zh/blog/thinknote-free-forever) |
-| 想要一个写作摆法 | [左边聊，右边整理](/zh/blog/ai-writing-workflow-sidepanel) |
+| 不想订阅也想常用 | [邀请好友，终身不限额度](/zh/blog/thinknote-free-forever) |
+| 换一种更好的AI写作工作流 | [用 AI 写作的工作流](/zh/blog/ai-writing-workflow-sidepanel) |
 
-闭环还是那一句：**Chat ↔ Think → Note → Share**。扩展负责在对话里把思考落成笔记；Word 加载项负责让内容回到你原来的文档里。两条路都成立：你想深想，侧栏在；你要快，一键进 Word。不难，就是别让好句子从窗口里溜走。
+闭环还是那一句：**Chat ↔ Think → Note → Share**。扩展负责在对话里把思考落成笔记；Word / WPS 加载项负责让内容回到你原来的文档里。两条路都成立：你想深想，侧栏在；你要快，一键进文档。不难，就是别让好句子从窗口里溜走。

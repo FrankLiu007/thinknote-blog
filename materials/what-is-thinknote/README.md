@@ -7,7 +7,7 @@
 
 - `/images/uploads/what-is-thinknote-hero.png`（hero：判断留在你这边）
 - `/images/uploads/what-is-thinknote-pocket.png`（侧栏像口袋）
-- `/images/uploads/what-is-thinknote-loop.png`（Chat ↔ Think → Note → Share）
+- `/images/uploads/what-is-thinknote-loop.webp`（Chat ↔ Think → Note → Share → 再编辑，闭环；原稿 `what-is-thinknote-loop.png`）
 - `/images/uploads/copy-note-docx.png`（产品段：一键进 Word）
 
 ## 草稿

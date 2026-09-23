@@ -2,6 +2,8 @@
 
 Raw sources (ThinkNote exports, chat dumps, unused reference images) go in `materials/<post-slug>/`, not `src/content/blog/`. That folder is a content collection and would publish or fail the build. Images already used in a post stay in `public/images/uploads/`.
 
+**Published images must be compressed WebP.** Do not put original PNG/JPEG into `public/images/uploads/` or point `heroImage` / markdown at them. Convert from the uncompressed source (not from an already-quantized PNG) with `sharp` in this repo. Hero-sized illustrations (~1536×1024) should land around 130–150 KB; smaller screenshots should be smaller. Keep the raw file in `materials/<post-slug>/`, publish only the `.webp`, and update paths. Exception: animated GIF when motion is the point.
+
 `heroImage` in frontmatter is optional. Leave it off unless the image belongs to that post. Do not reuse placeholders or unrelated screenshots as a cover.
 
 ## Development
